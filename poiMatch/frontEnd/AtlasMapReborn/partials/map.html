@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+    <style>
+    html{
+        height: 100%;
+    }
+    body{
+        margin: 0;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        height: 100%;
+        overflow: hidden;
+        position: relative;
+    }
+    .jm-img {
+        top:-31px;
+        left: -10px;
+    }
+    #current-floor{
+        position: absolute;
+        left: 10px;
+        top: 10px;
+        text-align: center;
+        z-index: 115;
+        font-family:Helvetica, Arial, Verdana;
+    }
+    #current-floor h2{
+        padding: 5px;
+        color: #FFF;
+        background-color: #333;
+        opacity: 0.6;
+        font-size: 24pt;
+        margin: 10px 0;
+        cursor: pointer;
+        position: relative;
+    }
+    #current-floor h2:after{
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 0;
+        border: solid 6px transparent;
+        border-top-color: #333;
+        bottom: -11px;
+        left: 50%;
+        margin-left: -6px;
+    }
+    #floor-switcher{
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        text-align: center;
+        line-height: 46px;
+        cursor: pointer;
+        background-color: #333;
+        opacity: 0.6;
+        -webkit-transition: all 0.5s;
+        -moz-transition: all 0.5s;
+        -ms-transition: all 0.5s;
+        -o-transition: all 0.5s;
+        transition: all 0.5s;
+        position: relative;
+    }
+    #floor-switcher li{
+        color: #FFF;
+        border-bottom: solid 1px #DDD;
+        position: relative;
+    }
+    #floor-switcher li.current:after{
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 0;
+        border: solid 6px transparent;
+        border-left-color: #CCC;
+        left: 4px;
+        top: 50%;
+        margin-top: -6px;
+    }
+    #floor-switcher li:last-child{
+        border: 0;
+    }
+    #floor-switcher li:hover{
+        color: rgba(255, 255, 255, 0.6);
+    }
+    #current-floor #floor-switcher{
+        left: -150%;
+    }
+    #current-floor.show #floor-switcher{
+        left: 0;
+    }
+
+
+    body.on #nav-on,
+    body #nav-off{
+        display: none;
+    }
+    body.on #nav-off,
+    body #nav-on{
+        display: block;
+    }
+    #nav-on,
+    #nav-off,
+    #prev,
+    #next{
+        height: 40px;
+        background: rgba(255, 255, 255, 0.6) url("./logo/icons.png") scroll no-repeat top;
+        cursor: pointer;
+    }
+    #nav-on,
+    #nav-off{
+        width: 40px;
+        position: absolute;
+        background-position: center 4px;
+        top: 30px;
+        right: 30px;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+        -webkit-box-shadow: 3px 3px 3px #CCC;
+        -moz-box-shadow: 3px 3px 3px #CCC;
+        box-shadow: 3px 3px 3px #CCC;
+        border: solid 1px #EEE;
+        z-index: 1000;
+    }
+    #nav-off{
+        background-position: center -170px;
+    }
+    #nav-actions{
+        width: 100%;
+        position: fixed;
+        bottom: 0;
+        border: solid 1px #DDD;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        -webkit-box-shadow: -4px 0px 3px #CCC;
+        -moz-box-shadow: -4px 0px 3px #CCC;
+        box-shadow: -4px 0px 3px #CCC;
+        z-index: 1000;
+        display: none;
+    }
+    body.on #nav-actions{
+        display: block;
+    }
+    #msg{
+        width: 60%;
+        float: left;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        border: solid 1px #DDD;
+        border-width: 0 2px;
+        text-align: center;
+        line-height: 30px;
+        padding: 5px 20px;
+        background-color: rgba(255, 255, 255, 0.6);
+    }
+    #prev{
+        width: 20%;
+        float: left;
+        background-position: center -54px;
+    }
+    #next{
+        width: 20%;
+        float: right;
+        background-position: center -114px;
+    }
+    .clear{
+        clear: both;
+    }
+    /*#logo{*/
+    /*width: 100px;*/
+    /*height: 30px;*/
+    /*opacity: 0.8;*/
+    /*position: fixed !important;*/
+    /*right: 10px;*/
+    /*bottom: 10px;*/
+    /*z-index: 1000;*/
+    /*}*/
+    /*body.on #logo{*/
+    /*bottom: 50px;*/
+    /*}*/
+
+    #nav-lines{
+        width: 100%;
+    }
+    .nav-line-dot{
+        fill: #FFF;
+        stroke: #AAF;
+        stroke-width: 0.4;
+    }
+    .nav-line-dot.current{
+        fill: #FFF;
+        stroke: #FAA;
+        stroke-width: 0.4;
+    }
+    .nav-line{
+        stroke: #AAF;
+        stroke-width: 0.4;
+    }
+
+    #form{
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        position: absolute;
+        z-index: 100000;
+        background-color: rgba(0, 0, 0, 0.2);
+        display: none;
+    }
+    #form form.form{
+        width: 300px;
+        padding: 20px 20px 10px;
+        margin: 0 auto;
+        margin-top: 200px;
+        background-color: #FFF;
+        border: solid 1px #EEE;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+        -webkit-box-shadow: 2px 2px 10px #EEE;
+        -moz-box-shadow: 2px 2px 10px #EEE;
+        box-shadow: 2px 2px 10px #EEE;
+    }
+    #form form.form h3{
+        margin: 0 0 10px;
+        font-size: 18px;
+        text-align: center;
+    }
+    form.form .form-group{
+        margin-bottom: 10px;
+        position: relative;
+    }
+    form.form .form-group label,
+    form.form .form-group input{
+        display: block;
+    }
+    form.form .form-group input{
+        width: 100%;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        border: solid 1px #AAF;
+        font-size: 18px;
+        padding: 8px 10px;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px;
+    }
+    form.form .form-group a{
+        line-height: 40px;
+        position: absolute;
+        right: 0;
+        top: 20px;
+        padding: 0 10px;
+        font-size: 14px;
+        color: #666;
+        text-decoration: none;
+        border-left: solid 1px #AAF;
+    }
+    form.form .form-group a:hover{
+        color: #999;
+    }
+    form.form .form-group button{
+        display: block;
+        font-size: 18px;
+        padding: 6px 10px;
+        margin-left: 20px;
+        background-color: #FFF;
+        border: solid 1px #DDD;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px;
+        float: right;
+        cursor: pointer;
+    }
+    form.form .form-group button.nav-start{
+        background-color: #99F;
+        border: solid 1px #67F;
+        color: #FFF;
+    }
+    form.form .form-group button:hover{
+        background-color: #EEE;
+        border: solid 1px #AAF;
+        color: #444;
+    }
+    .ui-autocomplete{
+        z-index: 10000000;
+    }
+    svg{
+        height: 100%;
+        width: 100%;
+        padding:10px;
+    }
+    </style>
+	<title>Atlas Mall</title>
+</head>
+<body>
+    <div class="snap-drawers">
+        <!-- <div class="left-drawer">
+            <div ng-include=" homeLeftPath "></div>
+        </div> -->
+        <div class="right-drawer">
+            <div ng-include=" '/partials/slider/home-search.html' "></div>
+        </div>
+    </div>
+	<div class="shop-allcontainer">
+		<div class="index-nav nav-position">
+			<h1>室内地图</h1>
+			<img style="z-index:220" src="./img/icon-back.png" onclick="history.go(-1)" alt="" class="icon-menu-back" >
+            <img src="./img/icon-menu.png" alt="" id="showRightPush" class="icon-menu-home">
+		</div>
+	</div>
+    <div id="content" style="background-color: #efeff4;">
+        <div id="loading" style="position:absolute; top:0px; left:0px; width:100%;height:100%;background-color: rgba(0,0,0,0.8);z-index:2000;background-image: url('map/css/img/loading.gif'); background-position:center center;background-size: 35px 35px; background-repeat: no-repeat">
+            <!--<img src="../css/img/loading.gif" width="10%" height="10%" style="margin: 50% 50%">-->
+        </div>
+        <div id="zoomDiv" style="position:absolute;">
+            <div id="mapDiv" ></div>
+            <div id="landmarks" class="landmarks" data-show-at-zoom="0" data-allow-drag="true" data-allow-scale="false" style="z-index:5"></div>
+        </div>
+        <div id="current-floor" style="margin-top:50px">
+            <h2></h2>
+            <ul id="floor-switcher">
+            </ul>
+        </div>
+    </div>
+    <!-- <div class="ICPnumber"><a href="http://www.miitbeian.gov.cn/state/outPortal/loginPortal.action">苏州图云信息科技有限公司&nbsp;&nbsp;版权所有&nbsp;&nbsp;苏ICP备14053328号</a></div> -->
+</body>
+</html>

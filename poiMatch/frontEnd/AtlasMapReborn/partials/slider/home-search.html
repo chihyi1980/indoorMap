@@ -1,0 +1,93 @@
+<div class="home-search">
+    <div class="home-search-top">
+        <div class="index-search-div">
+            <input type="text" class="index-search-input"  ng-keyup="entersearch($event,keyword)" ng-model="keyword" placeholder="搜索商场、品牌" ng-focus="showHistory">
+            <button class="index-search-button" ng-click="search(keyword.toLowerCase())"></button>
+            <div class="clear"></div>
+        </div>
+        <div class="index-right-tab" ng-show="!showHistory">
+            <ul class="index-right-tab-ul idTabs">
+                <a href=""><li ng-click = "changeTag('mall')" class="index-right-tab-mall" ng-if="tag==='mall'" id="index-right-tab-select">商场</li></a>
+                <a href=""><li ng-click = "changeTag('mall')" class="index-right-tab-mall" ng-if="tag!=='mall'">商场</li></a>
+                <a href=""><li ng-click = "changeTag('brand')" ng-if="tag==='brand'" class="index-right-tab-brand"  id="index-right-tab-select">品牌</li></a>
+                <a href=""><li ng-click = "changeTag('brand')" ng-if="tag!=='brand'">品牌</li></a>
+                <div class="clear"></div>
+            </ul>
+        </div>
+    </div>
+    <!-- <div class="index-search-history" ng-show="showHistory">
+        <ul class="index-showhistory">
+            <a href="#/search/{{hisitem}}" style="display:block;" ng-repeat="hisitem in showSeachHis track by $index">
+                <li class="index-showhistory-li">
+                    {{hisitem}}
+                </li>
+            </a>
+        </ul>
+        <button ng-click="removeSerachHis()" class="index-clearhistory">清除搜索结果</button>
+    </div> -->
+    <div class="index-search-list home-right-forsearch" ng-show="!showHistory">
+        <ul ng-show="tag==='mall'" class="index-click-mall-op-en index-menu-search-ul" id="index-right-tab-mall">
+            <div class="homesearch-mall">
+                 <li class="homesearch-mall-title" ng-click="changeCShopOpen()">
+                    <p><strong style="color:#f0f0f0;">我的收藏</strong></p>
+                </li>
+                <div class="collectshop">
+                    <div ng-click="gotoMall(building.id)" ng-show="!IsLikeBuildingEmpty" ng-repeat="building in likeBuilding">
+                        <li class="homesearch-mall-detail">
+                            <p>{{building.ch_name}}</p>
+                            <!-- <p>暂无收藏的商场</p> -->
+                        </li>
+                    </div>
+                    <div ng-show="IsLikeBuildingEmpty">
+                        <li class="homesearch-mall-detail">
+                            <p>暂无收藏的商场</p>
+                        </li>
+                    </div>
+                </div>
+            </div>
+            <div class="homesearch-mall" ng-repeat="subways in subway">
+                <li class="homesearch-mall-title" ng-click="changeSubOpen($index)">
+                    <p>{{subways._id}}</p>
+                    <img ng-show="!subways.isOpen" src="./img/icon-home-toggleclose.png" alt="" class="icon-hs-toggle">
+                    <img ng-show="subways.isOpen" src="./img/icon-home-toggleopen.png" alt="" class="icon-hs-toggle">
+                </li>
+                <div ng-click="gotoMall(dpoiid.poi_id)" ng-repeat="dpoiid in subways.poi_ids" ng-show="subways.isOpen">
+                    <li class="homesearch-mall-detail">{{dpoiid.ch_name}}</li>
+                </div>
+            </div>
+        </ul>
+        <ul ng-show="tag==='brand'" class="index-menu-search-ul index-click-brand-op-en" id="index-right-tab-brand">
+            <div class="home-brand-list">
+                 <li class="homesearch-mall-title" ng-click="changeCShopOpen()">
+                    <p><strong style="color:#f0f0f0;">我的收藏</strong></p>
+                </li>
+                <div class="collectshop">
+                    <div ng-show="IsLikeShopEmpty">
+                        <li class="homesearch-mall-detail">
+                            <p>暂无收藏的店铺</p>
+                        </li>
+                    </div>
+                    <li class="homesearch-collct-shop" ng-repeat="shop in likeShop" ng-click="homesearchgoshop('{{shop.id}}')">
+                        <p>{{shop.ch_name}}</p>
+                        <p>{{shop.buildingname}}{{shop.floorname}}</p>
+                        <!-- <a href="#/newMap/indoorMap.html?{{shop.mallid}}&{{shop.buildingid}}/{{shop.floorid}}/{{shop.id}}">
+                            <img src="./img/icon-homesearch-map.png" alt="" class="homesearch-collct-img">
+                        </a> -->
+                    </li>
+                </div>
+            </div>
+            <div class="home-brand-list" ng-repeat="brands in brand">
+                <li class="home-brand-title" ng-click="changeOpen($index)">
+                    <p>{{brands.category}}</p>
+                    <img ng-show="!brands.isOpen" src="./img/icon-home-toggleclose.png" alt="" class="icon-hs-toggle">
+                    <img ng-show="brands.isOpen" src="./img/icon-home-toggleopen.png" alt="" class="icon-hs-toggle">     
+                </li>
+                <div ng-show="brands.isOpen">
+                    <a href="#/brand/{{cityId}}/{{i.brandId}}?name={{i.brandName}}"ng-repeat="i in brands.brands">
+                        <li class="home-brand-detail">{{i.brandName}}</li>
+                    </a>
+                </div>
+            </div>
+        </ul>
+    </div>
+</div>

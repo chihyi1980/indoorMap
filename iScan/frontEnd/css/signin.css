@@ -1,0 +1,72 @@
+html {
+	height: 100%;
+}
+
+body {
+  color: white;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  height: 100%;
+  background: #1d2d44;
+  background-attachment: fixed;
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#35537a',endColorstr='#1d2d44',GradientType=0 );
+}
+
+.form-signin {
+  max-width: 330px;
+  padding: 15px;
+  margin: 0 auto;
+}
+.form-signin .form-signin-heading,
+.form-signin .checkbox {
+  margin-bottom: 10px;
+}
+.form-signin .checkbox {
+  font-weight: normal;
+}
+.form-signin .form-control {
+  position: relative;
+  font-size: 16px;
+  height: auto;
+  padding: 10px;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+.form-signin input[type="text"] {
+  margin-bottom: -1px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+div.container {
+	min-height: 100%;
+	margin: 0 auto -70px;
+	display: block;
+	width: 500px;
+}
+
+div.push {
+	height: 70px;
+}
+
+footer {
+	height: 70px;
+	display: block;
+	text-align: center;
+}
+
+footer p.info {
+	white-space: nowrap;
+	padding-top: 20px;
+	color: #ccc;
+	opacity: .6;
+}

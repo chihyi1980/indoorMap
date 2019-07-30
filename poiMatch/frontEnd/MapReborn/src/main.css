@@ -1,0 +1,417 @@
+html{
+    height: 100%;
+}
+body{
+    margin: 0;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    background-color: #ffffff !important;
+}
+.map-body{
+    position: absolute;
+    top: 50px;
+    width: 100%;
+}
+.map-floor-nav{
+    border-top: 1px solid #ffffff;
+    border-bottom: 1px solid #c8c8cb;
+    background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #FDF7FA), color-stop(1, #EDF2F7));
+    width: 100%;
+    height: 45px;
+}
+.map-floor-prev{
+    float: left;
+}
+.map-floor-next{
+    float: right;
+}
+.map-floor-prev,
+.map-floor-next{
+    display: inline-block;
+    width: 10%;
+    height: 45px;
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+    line-height: 40px;
+    cursor: pointer;
+    color: #666666;
+}
+.map-floor-list{
+    float: left;
+    display: block;
+    height: 45px;
+    width: 80%;
+    padding: 0;
+    overflow: hidden;
+}
+.map-floor-list li{
+    cursor: pointer;
+    display: inline-block;
+    height: 45px;
+    line-height: 43px;
+    text-align: center;
+    font-size: 18px;
+    float: left;
+    color: #63666c;
+}
+
+.map-floor-list .active{
+    color: #ffffff;
+    font-size: 22px;
+    background-color: #3385ff;
+}
+
+/*优惠*/
+.float-button{
+    position: absolute;
+    right: 15px;
+    top: 65px;
+    width: 40px;
+    height: 40px;
+    border-radius: 40px;
+    text-align: center;
+    line-height: 40px;
+    cursor: pointer;
+    z-index: 999;
+}
+#discount-show,
+#discount-hidden{
+    box-shadow: 0 0 10px RGBA(0,0,0,.5);
+    color: #eeeeff;
+    font-size: 12px;
+}
+#discount-show{
+    background-color: #6677FF;
+}
+#discount-hidden{
+    background-color: #909090;
+}
+#poi-detail{
+    height: 60px;
+    padding-top: 5px;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    border-top: 1px solid #ccc;
+    /*overflow: hidden;*/
+    z-index: 1000;
+    background-color: #F7F7F7;
+}
+
+#poi-detail .btn-navigation{
+    position: absolute;
+    top: -20px;
+    right: 10px;
+    height: 40px;
+    width: 40px;
+    background: #fff;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    color: #1F99E4;
+    font-size: 10px;
+    cursor: pointer;
+}
+
+#poi-detail span{
+    display: inline-block;
+    width: 40%;
+    height: 55px;
+    padding-left: 15px;
+}
+#poi-detail span p:first-child{
+    color: #282b2d;
+    width: 100%;
+    overflow: hidden;
+    height: 25px;
+    line-height: 25px;
+}
+#poi-detail span p:last-child{
+    color: #909090;
+    height: 20px;
+    overflow: hidden;
+    font-size: 12px;
+}
+#poi-detail .btn {
+    display: inline-block;
+    padding: 3px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+#poi-detail .btn-primary {
+    color: #fff;
+    background-color: #1F99E4;
+    /*border-color: #6677FF;*/
+    border: 0;
+    float: right;
+    margin-right:10px;
+    margin-top: 25px;
+}
+#poi-detail .btn-primary:hover{
+    background-color: #1F99E4;
+}
+
+#atlas-logo{
+    position:absolute;
+    width: 80px;
+    height: 30px;
+    background:url("../images/atlas.png") no-repeat;
+    background-size: 80px 30px;
+    bottom: 20px;
+    left: 5px;
+    z-index: 999;
+    opacity: 0.4;
+}
+
+#coupon-detail{
+    height: 55px;
+    width: 100%;
+    position: absolute;
+    bottom: 55px;
+    border-top: 1px solid #b7b7ba;
+    overflow: hidden;
+    z-index: 1000;
+    background-color: #F7F7F7;
+}
+#coupon-detail img{
+    height: 53px;
+    width: 20%;
+    display: inline-block;
+    float: left;
+}
+#coupon-detail p.desc{
+    display: inline-block;
+    width: 73%;
+    font-size:8px;
+    height: 20px;
+    overflow: hidden;
+    padding-left: 10px;
+    padding-top: 5px;
+}
+#coupon-detail p.price{
+    display: inline-block;
+    width: 73%;
+    font-size:12px;
+    overflow: hidden;
+    padding-left: 10px;
+}
+
+#coupon-detail p.price span.cur-price{
+    font-size: 16px;
+    color: #ff0000;
+    font-weight: bold;
+}
+#coupon-detail p.price span.old-price{
+    text-decoration: line-through;
+    font-size: 12px;
+    color: #909090;
+}
+
+/*page*/
+*{
+    margin: 0;
+    padding: 0;
+}
+.header{
+    width: 100%;
+}
+
+.header .nav{
+    height: 50px;
+    background: url(../images/overall-nav-bg.png) repeat-x center;
+    border-bottom: 1px solid #d71b39;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 100;
+}
+.header .nav h1{
+    font-size: 22px;
+    color: #fff;
+    line-height: 50px;
+    text-align: center;
+}
+
+.header .nav .go{
+    position: absolute;
+    top: 3px;
+    left: 3%;
+    padding: 10px 0;
+    padding-right: 20px;
+}
+
+#atlas{
+    width: 100%;
+    height: 100%;
+}
+
+.map-body .search{
+    width: 100%;
+    height: 50px;
+    background-color: #f0f0f0;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    z-index: 100;
+    border-bottom: 2px solid #ccc;
+}
+.map-body .search input{
+    width: 85%;
+    margin: 0 auto;
+    height: 30px;
+    line-height: 30px;
+    display: block;
+    border-radius: 5px;
+    padding-left: 5%;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+}
+#search-content{
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    z-index: 9999;
+    overflow: auto;
+    display: none;
+}
+#search-content .fac-list{
+    padding-top: 20px;
+}
+#search-content .fac-list ul{
+    width: 100%;
+    list-style: none;
+}
+#search-content .fac-list ul>li{
+    width: 25%;
+    float: left;
+    text-align: center;
+    margin-bottom: 15px;
+}
+#search-content .fac-list ul>li>img{
+    width: 50%;
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 5px;
+}
+#search-content .fac-list ul>li>p{
+    font-size: 12px;
+    text-align: center;
+    color: #333;
+}
+#search-content .closeSearch{
+    width: 100%;
+    margin-bottom: 20px;
+}
+#search-content .closeSearch button{
+    width: 80px;
+    height: 30px;
+    display: block;
+    margin: 0 auto;
+    line-height: 30px;
+    padding: 0;
+    border-radius: 10px;
+    background-color: #1F99E4;
+    border: 0;
+    font-size: 12px;
+    color: #fff;
+    margin-top: 50px;
+}
+.clear{
+    clear:both;
+}
+#NewFloor{
+    width: 35px;
+    position: absolute;
+    bottom: 50px;
+    left: 3%;
+    border-radius: 5px;
+    background-color: #fafafa;
+    border: 1px solid #ddd;
+}
+#NewFloor ul{
+    list-style: none;
+    width: 35px;
+    padding: 0;
+    margin: 0;
+}
+#NewFloor ul>li{
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    width: 35px;
+    color: #1F99E4;
+    font-weight: 700;
+    font-size: 14px;
+    border-bottom: 1px solid #ddd;
+}
+#NewFloor .myposition{
+    width: 35px;
+    height: 35px;
+    background-color: #fff;
+    border-radius: 0px 0px 5px 5px;
+    cursor: pointer;
+}
+#NewFloor .myposition img{
+    width: 21px;
+    margin: 7px 7px;
+}
+#searchinmall{
+    position: absolute;
+    top: 11px;
+    right: 0;
+    height: 30px;
+    right: 5%;
+    border: 0;
+    width: 50px;
+    border-radius: 0px 4px 4px 0px;
+    background-color: #f0f0f0;
+    border-left: 1px solid #ccc;
+    color: #999;
+}
+#searchList{
+    padding-top: 70px;
+    width: 90%;
+    margin: 0 auto;
+}
+#searchList a{
+    display: block;
+    font-size: 12px;
+    color: #333;
+    line-height: 35px;
+    text-decoration: underline;
+}
+#searchList h1,
+#searchList p{
+    text-decoration: none;
+    font-size: 12px;
+    color: #cc212d;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+#hidediv{
+    display: none;
+}
+.atlas-fac-bar{
+    display: none;
+}

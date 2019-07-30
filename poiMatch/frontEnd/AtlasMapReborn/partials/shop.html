@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title></title>
+</head>
+
+<body>
+    <div class="shop-allcontainer" id="shop-allcontainer" style="overflow:auto;">
+        <div class="index-nav nav-position" id="shop_nav">
+            <!-- <h1 ng-show="showMarquee"><marquee behavior="" direction="">{{shop.ch_name}}<span ng-show="shop.en_name.length > 0">( {{shop.en_name}} )</span></marquee></h1> -->
+            <p id="shop_nav-name"><span id="shop_h1">{{shop.ch_name}}<span ng-show="shop.en_name.length > 0">( {{shop.en_name}} )</span></span>
+            </p>
+            <img src="./img/icon-back.png" onclick="history.go(-1)" alt="" class="icon-menu-back">
+        </div>
+        <div class="shop-writecommit">
+            <a href="#/submit?sid={{shop.poi_id}}&cityid={{cityId}}">
+                <p><img src="./img/icon-shop-pencil.png" alt="" class="icon-shop-writecommit">写评价</p>
+            </a>
+        </div>
+        <div class="shop-body-con" id="shop-body-con" style="overflow:auto;">
+            <div class="collecttips" ng-show="showNotice">
+                <p class="collecttips-p">{{noticeContent}}</p>
+            </div>
+            <div class="shopcontainer">
+                <div class="shop-top">
+                    <img ng-src="{{shop.logo.key | logo}}" alt="" class="shop-logo">
+                    <div class="shop-top-right">
+                        <div class="shop-top-right-bottom">
+                            <div class="shop-top-div">
+                                <img src="./img/icon-home-pin.png" alt="" class="icon-mapoutdoor">
+                                <p class="shop-top-mapoutdoor">{{shop.mall.ch_name}}</p>
+                                <div class="clear"></div>
+                            </div>
+                            <div class="shop-top-div">
+                                <a   href="/MapReborn/indoorMap.html?{{shop.mall.poi_id}}&{{shop.building.poi_id}}/{{shop.floor.poi_id}}/{{shop.poi_id}}"
+                                ng-show="shop.floor.ch_name" class="shop-top-div">
+                                    <img src="./img/icon-map-indoors.png" alt="" class="icon-mapindoor">
+                                    <p class="shop-top-mapindoor">{{shop.floor.ch_name}}（室内地图）</p>
+                                    <div class="clear"></div>
+                                </a>
+                            </div>
+                            <div class="shop-collect">
+                                <img ng-click="toogleLike(shop)" class="icon-menu-heart" ng-src="{{isLike ? './img/shop-collected.png' : './img/shop-uncollect.png'}}"></img>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                    <div class="shop-tag">
+                        <ul class="shop-tag-ul" ng-show="shop.tag">
+                            <li ng-repeat="tag in shop.tag.split(',')" class="shop-tag-li">{{tag}}</li>
+                            <div class="clear"></div>
+                        </ul>
+                    </div>
+                </div>
+                <div class="shop-coupon" ng-show="shop.coupons">
+                    <ul class="shop-coupon-ul">
+                        <li class="shop-coupon-ul-title">
+                            <h3>优惠信息</h3>
+                        </li>
+                        <a href="#/coupon?url={{coupon.web_url}}&shopname={{shop.ch_name}}&mallid={{shop.mall.poi_id}}&buildingid={{shop.building.poi_id}}&floorid={{shop.floor.poi_id}}&shopid={{shop.poi_id}}&mallname={{shop.building.ch_name}}&way=0" ng-repeat="coupon in shop.coupons">
+                            <li class="shop-coupon-ul-li">
+                                <div class="shop-coupon-detail">
+                                    <img ng-src="{{coupon.pic_url}}" alt="" class="shop-coupon-ul-li-img">
+                                    <p class="shop-coupon-ul-li-p">{{coupon.desc}}
+                                    </p>
+                                    <p class="shop-coupon-price">
+                                        ￥{{coupon.current_price}}&nbsp;
+                                        <span style="text-decoration:line-through;">{{coupon.list_price}}</span>
+                                        <span style="color:#909090;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img ng-src="{{coupon.type | couponimg}}" alt="" style="max-width:12px;">&nbsp;来自{{coupon.type}}</span>
+                                    </p>
+                                    <div class="clear"></div>
+                                </div>
+                            </li>
+                        </a>
+                    </ul>
+                </div>
+                <div class="shop-thisinfo" ng-show="shop.comments">
+                    <ul class="shop-coupon-ul">
+                        <li class="shop-coupon-ul-title">
+                            <h3>用户评论</h3>
+                        </li>
+                        <li class="shop-coupon-ul-li" ng-repeat="comment in shop.comments">
+                            <div class="shop-coupon-detail">
+                                <p class="shop-comment-ul-li-p"><span style="color:#e53d23;">{{comment.user_nickname}}</span>：{{comment.text_excerpt}}<span class="shop-comment-type">（{{comment.create_time | commenttime}} &nbsp&nbsp <img ng-src="{{comment.type | couponimg}}" alt="" style="max-width:12px;">来自{{comment.type}}）</span>
+                                </p>
+                                <div class="clear"></div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="ICPnumber"><a href="http://www.miitbeian.gov.cn/state/outPortal/loginPortal.action">苏州图云信息科技有限公司&nbsp;&nbsp;版权所有&nbsp;&nbsp;苏ICP备14053328号</a></div> -->
+    </div>
+</body>
+
+</html>

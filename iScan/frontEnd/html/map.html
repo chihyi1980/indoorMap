@@ -1,0 +1,599 @@
+<ol class="breadcrumb">
+    <li><a href="/">Home</a></li>
+    <li class="active">Map</li>
+</ol>
+<ng-include src="'./html/com-nav.html'"></ng-include>
+<div class="container">
+
+<div class="row">
+
+<div class="col-xs-3">
+    <ng-include src="'./html/com-menu.html'"></ng-include>
+</div>
+
+<div class="col-xs-9">
+<div id="wrapper" style="border: 5px solid pink;">
+    <canvas id="map"></canvas>
+</div>
+
+<div id="pos">(0, 0)</div>
+
+<!-- <div class="alert alert-warning fade in">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+  <h4>Beacon objectId, (1, 1)</h4>
+  <p>
+    <button type="button" class="btn btn-danger">Take this action</button>
+    <button type="button" class="btn btn-default">Or do this</button>
+  </p>
+</div> -->
+
+<!-- show beacon details -->
+<div id="modal_beacon" class="modal fade" role="dialog" aria-labelledby="beacon_modal_title" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="express_modal_title">Details of beacon</h4>
+            </div>
+            <div class="modal-body">
+                <!--
+                  input: userid_input, select: select_admin
+                  input: input_devicename
+                  button: btn_save_device
+                 -->
+                <form class="form-horizontal" role="form">
+                    <!-- objectId -->
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">objectId</label>
+                        <div class="col-sm-10">
+                            <input id="input_objectId" type="text" class="form-control" disabled>
+                        </div>
+                    </div>
+                    <!-- UUID -->
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">UUID</label>
+                        <div class="col-sm-10">
+                            <input id="input_UUID" type="text" class="form-control" disabled>
+                        </div>
+                    </div>
+                    <!-- major -->
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">major</label>
+                        <div class="col-sm-10">
+                            <input id="input_major" type="text" class="form-control" disabled>
+                        </div>
+                    </div>
+                    <!-- power -->
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">power</label>
+                        <div class="col-sm-10">
+                            <input id="input_power" type="text" class="form-control" disabled>
+                        </div>
+                    </div>
+                    <!-- indoorGeo -->
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">indoorGeo</label>
+                        <div class="col-sm-10">
+                            <input id="input_indoorGeo" type="text" class="form-control" disabled>
+                        </div>
+                    </div>
+                    <!-- createdAt -->
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">createdAt</label>
+                        <div class="col-sm-10">
+                            <input id="input_createdAt" type="text" class="form-control" disabled>
+                        </div>
+                    </div>
+                    <!-- updatedAt -->
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">updatedAt</label>
+                        <div class="col-sm-10">
+                            <input id="input_updatedAt" type="text" class="form-control" disabled>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Back</button>
+                <% if(currentUser.isAdmin){ %>
+                <button id="btn_delete_beacon" type="button" class="btn btn-danger">Delete</button>
+                <% } %>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- add beacon modal -->
+<div id="modal_beacon_add" class="modal fade" role="dialog" aria-labelledby="add_beacon_modal_title" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="express_modal_title">Create a beacon</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" role="form">
+                    <!-- UUID -->
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">UUID</label>
+                        <div class="col-sm-10">
+                            <input id="input_UUID_add" type="text" class="form-control" placeholder="a string like 74278BDA-B644-4520-8F0C-720EDFC58917">
+                        </div>
+                    </div>
+                    <!-- major -->
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">major</label>
+                        <div class="col-sm-10">
+                            <input id="input_major_add" type="text" class="form-control" placeholder="a number">
+                        </div>
+                    </div>
+                    <!-- minor -->
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">minor</label>
+                        <div class="col-sm-10">
+                            <input id="input_minor_add" type="text" class="form-control" placeholder="a number">
+                        </div>
+                    </div>
+                    <!-- power -->
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">power</label>
+                        <div class="col-sm-10">
+                            <input id="input_power_add" type="text" class="form-control" placeholder="a number">
+                        </div>
+                    </div>
+                    <!-- indoorGeo -->
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">indoorGeo</label>
+                        <div class="col-sm-10">
+                            <input id="input_indoorGeo_add_x" type="text" class="form-control" disabled>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"></label>
+                        <div class="col-sm-10">
+                            <input id="input_indoorGeo_add_y" type="text" class="form-control" disabled>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button id="btn_add_beacon" type="button" class="btn btn-success">Sumbit</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- show device details -->
+<div id="modal_device" class="modal fade" role="dialog" aria-labelledby="device_modal_title" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="express_modal_title">Details of device</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" role="form">
+                    <!-- objectId -->
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">objectId</label>
+                        <div class="col-sm-10">
+                            <input id="input_objectId_device" type="text" class="form-control" disabled>
+                        </div>
+                    </div>
+                    <!-- userId -->
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">userId</label>
+                        <div class="col-sm-10">
+                            <input id="input_userId_device" type="text" class="form-control" disabled>
+                        </div>
+                    </div>
+                    <!-- deviceName -->
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">deviceName</label>
+                        <div class="col-sm-10">
+                            <input id="input_deviceName_device" type="text" class="form-control" disabled>
+                        </div>
+                    </div>
+                    <!-- indoorGeo -->
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">indoorGeo</label>
+                        <div class="col-sm-10">
+                            <input id="input_indoorGeo_device" type="text" class="form-control" disabled>
+                        </div>
+                    </div>
+                    <!-- createdAt -->
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">createdAt</label>
+                        <div class="col-sm-10">
+                            <input id="input_createdAt_device" type="text" class="form-control" disabled>
+                        </div>
+                    </div>
+                    <!-- updatedAt -->
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">updatedAt</label>
+                        <div class="col-sm-10">
+                            <input id="input_updatedAt_device" type="text" class="form-control" disabled>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Back</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script src="/js/jquery/jquery.min.1.10.1.js"></script>
+<script src="/js/jquery/bootstrap.min.js"></script>
+<script src="/js/easeljs-0.7.1.min.js"></script>
+<script src="/js/Beacon.js"></script>
+<script src="/js/Device.js"></script>
+<script type="text/javascript">
+
+
+/*
+ * init
+ */
+// var beacons = <%- JSON.stringify(beacons) %>;
+var beacons = [];
+var canvas = document.getElementById('map');
+var stage = new createjs.Stage('map');
+var scala = 0;
+var ori_width = <%= width %>;
+// cache of beacons' container
+var cons = [];
+var isAdmin = <%= currentUser.isAdmin %>;
+// cache of devices shown on map (easeljs object with its name = tagger json object)
+var devi = [];
+
+/*
+ * config
+ */
+stage.enableMouseOver(50);
+createjs.Touch.enable(stage);
+// Beacon settings
+Beacon.prototype.on('mouseover', function(e){
+    var x = e.target.name.indoorGeo.latitude;
+    var y = e.target.name.indoorGeo.longitude;
+
+    var background = new createjs.Shape();
+    background.graphics.beginFill("rgba(200,0,0,0.5)").drawRoundRect(0, 0, 70, 20, 5);
+
+    var label = new createjs.Text(x+',  '+y, '12px Helvetica', '#fff');
+    label.textAlign = "left";
+    label.textBaseline = "middle";
+    label.x = 5;
+    label.y = 10;
+
+    var con = new createjs.Container();
+    con.x = x * scala;
+    con.y = y * scala - 20;
+    con.name = e.target.name.objectId;
+    con.addChild(background, label);
+    cons.push(con);
+
+    stage.addChild(con);
+
+    stage.update();
+
+});
+Beacon.prototype.on('mouseout', function(e){
+    for(var i in cons){
+        stage.removeChild(cons[i]);
+    }
+    stage.update();
+});
+Beacon.prototype.on('click', function(e){
+    var beacon = e.target.name;
+    for(var key in beacon){
+        if(key === 'indoorGeo'){
+            $('#input_' + key).val('(' + beacon[key].latitude + ', ' + beacon[key].longitude + ')');
+        } else {
+            $('#input_' + key).val(beacon[key]);
+        }
+    }
+    $('#modal_beacon').modal();
+});
+//Device config
+// Beacon.prototype.on('mouseover', function(e){
+//   var x = e.target.name.indoorGeo.latitude;
+//   var y = e.target.name.indoorGeo.longitude;
+
+//   var background = new createjs.Shape();
+//   background.graphics.beginFill("rgba(0,0,230,0.8)").drawRoundRect(0, 0, 70, 20, 5);
+
+//   var label = new createjs.Text(x+',  '+y, '10px Helvetica', '#fff');
+//   label.textAlign = "left";
+//   label.textBaseline = "middle";
+//   label.x = 5;
+//   label.y = 10;
+
+//   var con = new createjs.Container();
+//   con.x = x * scala;
+//   con.y = y * scala - 20;
+//   con.name = e.target.name.objectId;
+//   con.addChild(background, label);
+//   cons.push(con);
+
+//   stage.addChild(con);
+
+//   stage.update();
+
+// });
+// Beacon.prototype.on('mouseout', function(e){
+//   for(var i in cons){
+//     stage.removeChild(cons[i]);
+//   }
+//   stage.update();
+// });
+Device.prototype.on('mouseover', function(e){
+    var x = e.target.name.lastIndoorGeo.latitude;
+    var y = e.target.name.lastIndoorGeo.longitude;
+
+    var background = new createjs.Shape();
+    background.graphics.beginFill("rgba(200,0,0,0.5)").drawRoundRect(0, 0, 70, 20, 5);
+
+    var label = new createjs.Text(e.target.name.deviceName, '12px Helvetica', '#fff');
+    label.textAlign = "left";
+    label.textBaseline = "middle";
+    label.x = 5;
+    label.y = 10;
+
+    var con = new createjs.Container();
+    con.x = x * scala;
+    con.y = y * scala - 20;
+    con.name = e.target.name.objectId;
+    con.addChild(background, label);
+    cons.push(con);
+
+    stage.addChild(con);
+
+    stage.update();
+
+});
+Device.prototype.on('mouseout', function(e){
+    for(var i in cons){
+        stage.removeChild(cons[i]);
+    }
+    stage.update();
+});
+Device.prototype.on('click', function(e){
+    var objectId = e.target.name.deviceId;
+    $.ajax({
+        url: '/devices/get/' + objectId,
+        type: 'GET',
+        dataType: 'json',
+        success: function(data, status){
+            var device = data.message;
+            for(var key in device){
+                $('#input_' + key + '_device').val(device[key]);
+            }
+            $('#input_indoorGeo_device').val('(' + e.target.name.lastIndoorGeo.latitude + ', ' + e.target.name.lastIndoorGeo.longitude + ')');
+            $('#modal_device').modal();
+        },
+        error: function(){
+
+        }
+    })
+    // for(var key in beacon){
+    //   if(key === 'indoorGeo'){
+    //     $('#input_' + key).val('(' + beacon[key].latitude + ', ' + beacon[key].longitude + ')');
+    //   } else {
+    //     $('#input_' + key).val(beacon[key]);
+    //   }
+    // }
+    // $('#modal_beacon').modal();
+});
+
+
+/*
+ * load map
+ */
+var map = new Image();
+map.src = '/images/map.png';
+map.onload = imageLoadedHandler;
+function imageLoadedHandler(e){
+    var image = e.target;
+    canvas.width = image.width;
+    canvas.height = image.height;
+    $('#wrapper').width(image.width);
+    $('#wrapper').height(image.height);
+    scala = (image.width / ori_width).toFixed(6);
+
+    //load background
+    var container = new createjs.Container();
+    stage.addChild(container);
+    var bitmap = new createjs.Bitmap(image);
+    bitmap.x = 0;
+    bitmap.y = 0;
+    container.addChild(bitmap);
+
+    //add beacon
+    bitmap.on('click', function(e){
+        if(!isAdmin) return;
+        // clear modal
+        $('#modal_beacon_add input').each(function(){
+            $(this).val('');
+        })
+        var latitude = (stage.mouseX / scala).toFixed(2);
+        var longitude = (stage.mouseY / scala).toFixed(2);
+        $('#input_indoorGeo_add_x').val(latitude);
+        $('#input_indoorGeo_add_y').val(longitude);
+        $('#modal_beacon_add').modal();
+    })
+
+    loadBeacons();
+
+    //load devices for the first time
+    loadLastedTagger();
+
+    stage.update();
+
+    // load new devices every 30 seconds
+    setInterval(loadLastedTagger, 1000);
+}
+
+/*
+ *  add / delete a beacon
+ */
+$('#btn_add_beacon').on('click', function(){
+    $.ajax({
+        url: '/beacons/add',
+        type: 'GET',
+        data: {
+            UUID: $('#input_UUID_add').val(),
+            major: $('#input_major_add').val(),
+            minor: $('#input_minor_add').val(),
+            power: $('#input_power_add').val(),
+            indoorGeo: {
+                __type: 'GeoPoint',
+                latitude: parseFloat($('#input_indoorGeo_add_x').val()),
+                longitude: parseFloat($('#input_indoorGeo_add_y').val())
+            }
+        },
+        dataType: 'json',
+        success: function(data, status){
+            if(data.message === 'done'){
+                // reload beacons and re-draw
+                loadBeacons();
+                $('#modal_beacon_add').modal('hide');
+                // window.location.reload();
+            }
+        },
+        error: function(){
+            $('#modal_device').modal('hide');
+        }
+    })
+})
+$("#btn_delete_beacon").on("click", function(e){
+    if(confirm('Delete this beacon ?')){
+        $.ajax({
+            url: '/beacons/delete',
+            type: 'GET',
+            data: {
+                objectId: $('#input_objectId').val()
+            },
+            dataType: 'json',
+            success: function(data, status){
+                if(data.message === 'done'){
+                    // reload beacons and re-draw
+                    loadBeacons();
+                    $('#modal_beacon').modal('hide');
+                    // window.location.reload();
+                }
+                if(data.message === 'no access'){
+                    $('#modal_beacon').modal('hide');
+                    alert('no access');
+                }
+                window.location.reload();
+            },
+            error: function(){
+                $('#modal_beacon').modal('hide');
+            }
+        })
+    }
+})
+
+/*
+ * draw guide line
+ */
+stage.addEventListener('stagemousemove', function(e){
+    var line = new createjs.Shape();
+    line.graphics.setStrokeStyle(1);
+    line.graphics.beginStroke('rgba(0,0,230,0.8)');
+    line.graphics.moveTo(0, stage.mouseY);
+    line.graphics.lineTo(map.width, stage.mouseY);
+    line.graphics.moveTo(stage.mouseX, 0);
+    line.graphics.lineTo(stage.mouseX, map.height);
+    line.graphics.endStroke();
+    stage.addChild(line);
+    stage.update();
+    stage.removeChild(line);
+    //update coordinate
+    $('#pos').html(
+                    '(' + (stage.mouseX / scala).toFixed(2) + ',' + (stage.mouseY / scala).toFixed(2) + ')'
+    );
+})
+
+// get beacon list and draw
+function loadBeacons(){
+    $.ajax({
+        url: '/beacons/getBeaconList',
+        type: 'GET',
+        dataType: 'json',
+        success: function(data, status){
+            // clear old beacons
+            for(var b in beacons){
+                //easeljs -> stage.removeChild(name)
+                stage.removeChild(beacons[b]);
+            }
+            beacons = data.message;
+            // draw beacons
+            for(var index in beacons){
+                var beacon = stage.addChild(new Beacon('B', 'red', stage));
+                beacon.x = beacons[index].indoorGeo.latitude * scala - beacon.getBounds().width / 2;
+                beacon.y = beacons[index].indoorGeo.longitude * scala - beacon.getBounds().height / 2;
+                beacon.cursor = "pointer";
+                beacon.name = beacons[index];
+            }
+        }
+    })
+}
+
+var DEV_LIST = {
+    "RpJmHHHP": "小米3",
+    "HGm4777T": "红米1s"
+}
+
+// get tagger list
+function loadLastedTagger(){
+    //pull new devices
+    $.ajax({
+        url: '/ajaxDeviceList',
+        type: 'GET',
+        dataType: 'json',
+        success: function(data, status){
+            var devices = data.message;
+            for(var index in devices){
+                var device = devices[index];
+                // get tagger by device.objectid
+                $.ajax({
+                    url: '/ajaxLatestTagger',
+                    data: {
+                        device: device
+                    },
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data, status){
+                        var tagger = data.message;
+                        if(tagger){
+                            //clear old devices before draw new ones
+                            for(var d in devi){
+                                if(devi[d].name.deviceId === data.message.deviceId)
+                                    stage.removeChild(devi[d]);
+                            }
+                            // generate device
+                            var device = stage.addChild(new Device('D', 'blue', stage));
+                            devi.push(device);
+                            device.x = tagger.lastIndoorGeo.latitude * scala - device.getBounds().width / 2;
+                            device.y = tagger.lastIndoorGeo.longitude * scala - device.getBounds().height / 2;
+                            device.cursor = "pointer";
+                            device.name = tagger;
+                            device.name.deviceName = DEV_LIST[tagger.deviceId];
+                            stage.update();
+                        }
+                    }
+                })
+            }
+        }
+    })
+}
+
+</script>
+</div><!-- /col-xs-9 -->
+
+</div><!-- /row -->
+
+</div> <!-- /container -->

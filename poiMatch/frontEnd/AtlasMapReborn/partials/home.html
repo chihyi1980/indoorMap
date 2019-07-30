@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+
+	<title></title>
+
+</head>
+<body class="snapjs-right snapjs-left">
+	<div class="snap-drawers">
+		<div class="right-drawer" id="right-drawer">
+            <div ng-include=" '/partials/slider/home-search.html' "></div>
+		</div>
+	</div>
+	<div id="content" style="background-color: #efeff4;">
+		<div class="index-nav nav-position">
+			<p>{{cityId | cityName}}商场通</p>
+			<img src="./img/icon-menu.png" alt="" id="showRightPush" class="icon-menu-home">
+		</div>
+		<div class="index-container">
+			<ul class="index-container-ul"  whenScrolled="loadMore()">
+				<li class="index-container-li" ng-repeat="likemall in likeMalls">
+					<div id="{{likemall.poi_id}}">
+						<div ng-click="changelikeCardOpen($index)">
+							<div class="index-building-img-div">
+								<img ng-src="{{likemall.buildings[0].pics[0].key | img}}" alt="" class="index-building-img">
+							</div>
+							<div class="index-building-info">
+								<p class="index-building-name">{{likemall.ch_name}}</p>
+								<img src="./img/icon-home-toggleopen.png" alt="" class="icon-home-toggle" ng-show="likemall.isOpen">
+								<img src="./img/icon-home-toggleclose.png" alt="" class="icon-home-toggle" ng-show="!likemall.isOpen">
+								<div class="index-building-locate">
+									<img class="icon-home-locate" src="./img/icon-home-pin.png" alt="">
+									<p class="index-building-distance"><span>{{likemall.location.substring(0,likemall.location.length-3)}}</span>km</p>
+									<div class="clear"></div>
+								</div>
+								<div class="index-building-opentime">
+									<img class="icon-home-opentime" src="./img/icon-home-clock.png" alt="" ng-show="likemall.open!=null">
+									<p class="index-building-opentime-p">{{likemall.open}}</p>
+									<div class="clear"></div>
+								</div>
+								<div class="clear"></div>
+							</div>
+						</div>
+						<div class="home-mall-detail" ng-show="likemall.isOpen">
+							<img src="./img/icon-home-departtri.jpg" alt="" class="icon-departtri">
+							<a href="#/go?goloc={{likemall.loc.coordinates[0]}}&golat={{likemall.loc.coordinates[1]}}&gomallname={{likemall.ch_name}}">
+								<div class="home-mall-detail-div">
+									<img src="./img/icon-home-go-go.png" alt="" class="icon-home-go">
+									<p class="home-mall-detail-text">去</p>
+								</div>
+							</a>
+							<a href="/newMap/indoorMap.html?{{likemall.poi_id}}&{{likemall.buildings[0].poi_id}}&{{thisuid}}">
+								<div class="home-mall-detail-div">
+									<img src="./img/icon-home-go-hang.png" alt="" class="icon-home-go">
+									<p class="home-mall-detail-text">逛</p>
+								</div>
+							<a href="#/malltag/{{cityId}}/{{likemall.poi_id}}/0+1+5">
+								<div class="home-mall-detail-div">
+									<img src="./img/icon-home-go-eat.png" alt="" class="icon-home-go">
+									<p class="home-mall-detail-text">吃</p>
+								</div>
+							</a>
+							<a href="#/category/{{likemall.poi_id}}/{{cityId}}">
+								<div class="home-mall-detail-div">
+									<img src="./img/icon-home-go-buy.png" alt="" class="icon-home-go">
+									<p class="home-mall-detail-text">买</p>
+								</div>
+							</a>
+							<a href="#/malltag/{{cityId}}/{{likemall.poi_id}}/2">
+								<div class="home-mall-detail-div">
+									<img src="./img/icon-home-go-play.png" alt="" class="icon-home-go">
+									<p class="home-mall-detail-text">玩</p>
+								</div>
+							</a>
+							<div class="clear"></div>
+						</div>
+						<div class="building-collectarea">
+								<img ng-click="toogleLikeBuildingLike(likemall)" class="index-menu-ul-img" ng-src="{{likemall.likeImg}}"></img>
+							</div>
+					</div>
+					<!-- </a> -->
+				</li>
+				<li class="index-container-li" ng-repeat="unlikemall in unLikeMalls">
+					<a name="{{unlikemall.poi_id}}" id="{{unlikemall.poi_id}}">
+						<div id="{{unlikemall.poi_id}}" name="{{unlikemall.poi_id}}">
+							<div ng-click="changeCardOpen($index)">
+								<div class="index-building-img-div">
+									<img image-lazy-src="{{unlikemall.buildings[0].pics[0].key | img}}" alt="" class="index-building-img">
+									<!-- <img bn-lazy-src="{{ photo.src }}" width="150" height="150" alt="" class="index-building-img"> -->
+								</div>
+								<div class="index-building-info">
+									<p class="index-building-name">{{unlikemall.ch_name}}</p>
+									<img src="./img/icon-home-toggleopen.png" alt="" class="icon-home-toggle" ng-show="unlikemall.isOpen">
+									<img src="./img/icon-home-toggleclose.png" alt="" class="icon-home-toggle" ng-show="!unlikemall.isOpen">
+									<div class="index-building-locate">
+										<img class="icon-home-locate" src="./img/icon-home-pin.png" alt="">
+										<p class="index-building-distance"><span>{{unlikemall.location.substring(0,unlikemall.location.length-3)}}</span>km</p>
+										<div class="clear"></div>
+									</div>
+									<div class="index-building-opentime">
+										<img class="icon-home-opentime" src="./img/icon-home-clock.png" alt="" ng-show="unlikemall.open!=null">
+										<p class="index-building-opentime-p">{{unlikemall.open}}</p>
+										<div class="clear"></div>
+									</div>
+									<div class="clear"></div>
+								</div>
+							</div>
+							<div class="home-mall-detail" ng-show="unlikemall.isOpen">
+								<img src="./img/icon-home-departtri.jpg" alt="" class="icon-departtri">
+								<!-- <a href="partials/outdoormap.html?loc={{unlikemall.loc.coordinates[0]}}&lat={{unlikemall.loc.coordinates[1]}}&mallname={{unlikemall.ch_name}}"> -->
+								<a href="#/go?goloc={{unlikemall.loc.coordinates[0]}}&golat={{unlikemall.loc.coordinates[1]}}&gomallname={{unlikemall.ch_name}}">
+									<div class="home-mall-detail-div">
+										<img src="./img/icon-home-go-go.png" alt="" class="icon-home-go">
+										<p class="home-mall-detail-text">去</p>
+									</div>
+								</a>
+								<a href="/newMap/indoorMap.html?{{unlikemall.poi_id}}&{{unlikemall.buildings[0].poi_id}}&{{thisuid}}">
+									<div class="home-mall-detail-div">
+										<img src="./img/icon-home-go-hang.png" alt="" class="icon-home-go">
+										<p class="home-mall-detail-text">逛</p>
+									</div>
+								<a href="#/malltag/{{cityId}}/{{unlikemall.poi_id}}/0+1+5">
+									<div class="home-mall-detail-div">
+										<img src="./img/icon-home-go-eat.png" alt="" class="icon-home-go">
+										<p class="home-mall-detail-text">吃</p>
+									</div>
+								</a>
+								<a href="#/category/{{unlikemall.poi_id}}/{{cityId}}">
+									<div class="home-mall-detail-div">
+										<img src="./img/icon-home-go-buy.png" alt="" class="icon-home-go">
+										<p class="home-mall-detail-text">买</p>
+									</div>
+								</a>
+								<a href="#/malltag/{{cityId}}/{{unlikemall.poi_id}}/2">
+									<div class="home-mall-detail-div">
+										<img src="./img/icon-home-go-play.png" alt="" class="icon-home-go">
+										<p class="home-mall-detail-text">玩</p>
+									</div>
+								</a>
+								<div class="clear"></div>
+							</div>
+							<div class="building-collectarea">
+								<img ng-click="toogleLikeBuilding(unlikemall)" class="index-menu-ul-img" ng-src="{{unlikemall.likeImg}}"></img>
+							</div>
+						</div>
+					</a>
+				</li>
+			</ul>
+		</div>
+		<!-- <div class="ICPnumber"><a href="http://www.miitbeian.gov.cn/state/outPortal/loginPortal.action">苏州图云信息科技有限公司&nbsp;&nbsp;版权所有&nbsp;&nbsp;苏ICP备14053328号</a></div> -->
+	</div>
+</body>
+</html>

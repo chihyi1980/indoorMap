@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title></title>
+    <link href="./src/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="./src/jqueryUI/jquery-ui-1.10.0.custom.css" rel="stylesheet">
+    <link href="./src/mapSdk.css" rel="stylesheet">
+    <script src="./src/mapSdk.js"></script>
+    <script src="./src/extra.js"></script>
+    <script src="./src/mapSdk.ui.js"></script>
+    <script src="./src/jquery.min.1.10.1.js"></script>
+    <script src="./src/bootstrap/js/bootstrap.min.js"></script>
+    <script src="./src/jqueryUI/jquery-ui-1.9.2.custom.min.js"></script>
+
+</head>
+<body>
+<nav class="navbar navbar-inverse" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">
+                <strong>iScan</strong>
+            </a>
+        </div>
+    </div>
+</nav>
+<div class="container-fluid" id="mainBody" style="overflow: hidden; min-height: 450px;">
+    <table style="width: 100%;height: 100%;">
+        <tr style="width: 100%;height: 100%;">
+            <td valign="top" style="width: 230px !important;height: 100%;padding-right:10px;border-right: solid 2px #515151">
+                <div class="form-group">
+                    <div class="input-group has-success">
+                        <div class="input-group-addon" id="resetTime" title="Reset time." style="cursor: pointer;"> <span class="glyphicon glyphicon-time"></span></div>
+                        <input class="form-control" type="text" id="dateDisplay" placeholder="date" style="text-align: center;font-weight: bold;color: #37424a" readonly>
+                    </div>
+                </div>
+                <div id="datepicker"></div>
+                <div style="text-align: center">
+                    <span class="label label-default" id="rangeTime" style="margin-top: -10px;">
+
+                    </span>
+                </div>
+                <div id="h-slider" style="margin-top: 5px;"></div>
+
+                <hr/>
+                <div style="margin-top: 10px"  id="siteSel">
+                    <select class="form-control">
+                        <option value="" selected>请选择一个场地:</option>
+                    </select>
+                </div>
+                <hr/>
+                <button type="button" id="submit" class="form-control btn btn-primary" disabled>search</button>
+            </td>
+            <td style="min-width: 450px !important;padding-left: 5px;">
+                <div class="alert alert-danger" style="display: none;position: absolute; width: 400px;z-index: 9999">
+                    <strong>No data!</strong>
+                </div>
+                <div style="width: 100%; height: 100%; border: 1px dashed #515151" id="indoormap">
+                    <table style="height: 100%; width: 100%" id="introduce">
+                        <tr  style="width: 100%;height: 100%;">
+                            <td valign="center"  style="width: 100%;height: 100%; overflow: hidden">
+                                    <div class="jumbotron" style="width: 80%; margin: 0 auto; padding: 20px;">
+                                        <h2>Welcome!</h2>
+                                        <p>Pick the date, slide the time and select a site.</p>
+                                        <p>Then click the button  <button type="button" class="btn btn-primary">search</button></p>
+                                    </div>
+
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div id="atlas"></div>
+                    <div id="menu" style="overflow-y: auto; overflow-x: hidden;position: absolute; left:255px;top: 75px; z-index:999;height:80%;width: 150px; background-color:#FDFDFD;  border: 1px solid #515151;display: none">
+                        <span class="glyphicon glyphicon-remove-circle" style="cursor:pointer;z-index:999;position:absolute; top:0; right: 0; color: #0064cd "
+                              onclick=" $('#menu').slideToggle();"></span>
+                        <div class="list-group" style="padding: 20px 0; ">
+
+                        </div>
+
+                    </div>
+                    <div id="userSel"  style="position: absolute; right: 20px; top: 75px; z-index: 999; width: 150px; height: 20px; display: none">
+                        <select class="form-control">
+                            <option value="" selected>选择人员:</option>
+                        </select>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <div id="dialog-message" title="Video view">
+        <iframe  id="demoIframe" src="" style="width: 100%;height: 96%;">
+
+        </iframe>
+    </div>
+
+</div>
+</body>
+<script>
+    $(function(){
+        var minutesVal =  Math.floor((new Date().getHours() * 60 + new Date().getMinutes()) / 5 + 0.5);
+        minutesVal = Math.min(287, Math.max(1, minutesVal));
+        var getTimeStr = function(minutes){
+            minutes = Math.floor(minutes);
+            var hourStr = Math.floor(minutes / 60).toString();
+            hourStr = hourStr.length == 2 ? hourStr: '0'.concat(hourStr);
+            var minuteStr = (minutes % 60).toString();
+            minuteStr = minuteStr.length == 2 ? minuteStr: '0'.concat(minuteStr);
+            return [hourStr, minuteStr,'00'].join(':');
+        };
+        var getUrlArgs = (function(){
+            var curWwwPath = window.document.location.href;
+            var argsStr = curWwwPath.split('?')[1] || '';
+            var ip = '192.168.1.192', port = 7001;
+            if(argsStr){
+                var argArr = argsStr.split('&');
+                argArr.forEach(function(item){
+                    if(item.indexOf('=') > -1){
+                        eval(item.split('=')[0] + '="' + item.split('=')[1] + '"')
+                    }
+                    
+                });
+            }
+            return {ip : ip, port: port};
+        })();
+
+        (function(){
+            localStorage.clear();
+            $('body').off();
+            var curDateStr = $.datepicker.formatDate("yy-mm-dd ", new Date());
+            $('#dateDisplay').val(curDateStr.concat(getTimeStr(minutesVal * 5)));
+            $('#rangeTime').html('( {start} ~ {end} )'
+                    .replace('{start}', getTimeStr(minutesVal * 5 - 5))
+                    .replace('{end}', getTimeStr(minutesVal * 5)));
+            $('#mainBody').height(($(document).height() - 100) + 'px');
+            $('#menu').height(($(document).height() - 110) + 'px');
+            Date.prototype.Format = function (fmt) {
+                var o = {
+                    "M+": this.getMonth() + 1,
+                    "d+": this.getDate(),
+                    "h+": this.getHours(),
+                    "m+": this.getMinutes(),
+                    "s+": this.getSeconds(),
+                    "q+": Math.floor((this.getMonth() + 3) / 3),
+                    "S": this.getMilliseconds()
+                };
+                if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+                for (var k in o)
+                    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+                return fmt;
+            };
+        })();
+
+        $("#dialog-message").dialog({
+            autoOpen: false,
+            modal: true,
+            width: 600,
+            height: 400,
+            buttons: {
+                "Ok": function () {
+                    $(this).dialog("close");
+                    $('#demoIframe').attr('src', '');
+                }
+            }
+        });
+
+        var initTime = function(){
+            $('#datepicker').datepicker( "setDate", $.datepicker.formatDate("yy-mm-dd", new Date()));
+            $('#dateDisplay').val($.datepicker.formatDate("yy-mm-dd", new Date()).concat(' 00:00:00'));
+        };
+
+        //$('body').on('click', '#resetTime', initTime);
+
+        $('#datepicker').datepicker({
+            dateFormat: "yy-mm-dd",
+            maxDate: "+0d",
+            minDate: '-7d',
+            firstDay: 1,
+            inline: true,
+            onSelect: function(ev){
+                var timeStr = $('#dateDisplay').val().split(/\s+/)[1];
+                $('#dateDisplay').val([ev, timeStr].join(' '));
+            }
+        });
+
+
+        $('#h-slider').slider({
+            //orientation: "vertical",
+            range: "min",
+            min: 1,
+            max: 287,
+            value: minutesVal,
+            slide: function (event, ui) {
+                var dateStr = $('#dateDisplay').val().split(/\s+/)[0];
+                var timeStr = getTimeStr(+ui.value * 5 );
+                var curTime = [dateStr, timeStr].join(' ');
+                $('#dateDisplay').val(curTime);
+                var startStr = new Date(new Date(curTime).getTime() - 5 * 60 * 1000).Format('hh:mm:ss');
+                $('#rangeTime').html('( {start} ~ {end} )'
+                        .replace('{start}', startStr)
+                        .replace('{end}', timeStr));
+            }
+        });
+        //map init
+        var showVideoList = function(videoId, list){
+            //$("#menu").menu();
+            var liStr = '';
+            list.forEach(function(item){
+                liStr += '<a class="list-group-item" style="cursor: pointer;" vid="{vid}" ts="{ts}">{time}</a>'
+                        .replace('{time}', new Date(item.time).Format('hh:mm:ss'))
+                        .replace('{vid}', videoId)
+                        .replace('{ts}', item.time);
+            });
+            $("#menu .list-group").html(liStr);
+            $("#menu").slideToggle();
+        };
+        var mapSdk, jid, mapId, userPoints = {}, allPoints = [];
+        var initMap = function(buildId, callback) {
+            $("#atlas").html('');
+            var buildUrl = '/indoorMap/build/detail?id=' + buildId;
+            $.get(buildUrl)
+                    .success(function (ret) {
+                        if (ret && ret.result == 'succeed') {
+                            var build = ret.data;
+                            var floorList = build.floors;
+                            var params = {
+                                width: $('#indoormap').width(),
+                                height: $('#indoormap').height(),
+                                cityId: "",
+                                floorList: floorList,
+                                serverHost: 'iscan2.atlasyun.com',
+                                mapDiv: 'atlas',
+                                maxZoom: 15,
+                                minZoom: 0.5,
+                                initFloor: '',
+                                initZoom: 1,
+                                initMarkPoi: '',
+                                initCallback: function () {
+
+                                },
+                                layerClick: function (fenceId, points) {
+                                    if(points && points.length > 0){
+                                        showVideoList(fenceId, points);
+                                    }else{
+                                        $(".alert").show();
+                                        $(".alert").fadeOut(2500);
+                                    }
+                                },
+                                enFloorUI: true,
+                                enFacUI: false,
+                                enBufferUI: true,
+                                apiUrl:  '/indoorMap/floor/simple',
+                                fenceUrl: '/indoorMap/floor/fence',
+                                floorChange: function (floorName) {
+
+                                }
+                            };
+                            mapSdk = new Atlas(params);
+                        }
+                    })
+        };
+        $.get('/jobsite/all?l=20&s=0')
+                .success(function(data){
+                    var optionStr = '<option value="" selected>请选择一个场地:</option>';
+                    if(data){
+                        data[1].forEach(function(item){
+                            optionStr += '<option value="{val}">{name}</option>'.replace('{val}', item.id + '&' + item.mapId).replace('{name}', item.name);
+                        });
+                        $('#siteSel select').children().replaceWith($(optionStr));
+                    }
+                }).error(function(err){
+                    alert('Jobsite get error');
+                    window.location.href = '/poc';
+                });
+        $('body').on('change', '#siteSel select', function(e){
+            var that = e.target;
+            var ids = $(that).val().split('&');
+            jid = ids[0];
+            mapId = ids[1];
+            $('#submit').attr('disabled', true);
+            $("#menu").hide();
+            $("#atlas").hide();
+            $('#userSel').hide();
+            $('#introduce').fadeIn();
+            if(mapId){
+                $('#submit').removeAttr('disabled');
+                $('#introduce').hide();
+                $("#atlas").fadeIn();
+                initMap(mapId);
+            }
+        });
+        $('body').on('click', '#submit', function(e){
+            if(mapId  && mapSdk && jid){
+                $("#menu").hide();
+                var end = new Date($('#dateDisplay').val().trim()).getTime(),
+                    start = end - 5 * 60 * 1000;
+                $.post('/tagger/getInPeriod/' + jid, {start: start, end: end})
+                    .success(function(data){
+                        if(data){
+                            allPoints = [];
+                            userPoints = {};
+                            data.forEach(function(item){
+                                if(item.coord){
+                                    var temp = item.coord;
+                                    temp['time'] = new Date(item.createAt).getTime();
+                                    temp['uid'] = item.userId;
+                                    if(userPoints[item.userId] == undefined || userPoints[item.userId] == null){
+                                        userPoints[item.userId] = [];
+                                    }
+                                    userPoints[item.userId].push(temp);
+                                    allPoints.push(temp);
+                                }
+                            });
+                            mapSdk._drawTrack(allPoints, function(colors){
+                                var optionStr = '<option value="" selected>选择人员:</option>';
+                                if(colors){
+                                    for(var i in colors){
+                                        if(userPoints[i] && userPoints[i].length > 0){
+                                            optionStr += '<option value="{val}" style="color:{color}">{name}</option>'
+                                                    .replace('{val}', i)
+                                                    .replace('{name}', i)
+                                                    .replace('{color}', colors[i]);
+
+                                        }
+                                    }
+                                }
+                                $('#userSel select').html(optionStr);
+                                $('#userSel').show();
+                            });
+                        }
+                    }).error(function(){
+                        console.log('search failed!')
+                    })
+            }
+        });
+        $('body').on('change', '#userSel select', function(e){
+            var that = e.target;
+            var userId = $(that).val();
+            if(userId && userPoints[userId]){
+                if(mapSdk){
+                    mapSdk._drawTrack(userPoints[userId]);
+                }
+            }else{
+                if(mapSdk){
+                    mapSdk._drawTrack(allPoints);
+                }
+            }
+        });
+
+        $('body').on('click', '#menu .list-group a', function(e){
+            var time = $(e.target).attr('ts');
+            var videoId = $(e.target).attr('vid');
+            if(time && videoId){
+                //var videoUrl = 'http://{ip:port}/media/00-10-F3-3E-F2-6B.webm?pos={pos}&endPos={endPos}'
+                var videoUrl = 'http://{ip:port}/media/{videoId}.webm?pos={pos}&endPos={endPos}'
+                        .replace('{ip:port}', [getUrlArgs.ip, getUrlArgs.port].join(':'))
+                        .replace('{videoId}', videoId)
+                        .replace('{pos}', (+time - 10000))
+                        .replace('{endPos}', (+time + 10000));
+                $('#demoIframe').attr('src', videoUrl);
+                $('#dialog-message').dialog('open');
+                return false;
+            }
+        });
+
+        //end
+    });
+
+</script>
+</html>

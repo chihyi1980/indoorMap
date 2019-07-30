@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<title>Atlas Mall</title>
+</head>
+<body>
+	<div id="content">
+		<div class="index-nav nav-position">
+			<h1>我的收藏</h1>
+			<img src="./img/icon-back.png" alt="" class="icon-menu-back" onclick="history.go(-1)" >
+		</div>
+		<div class="cate-container">
+			<!-- <p class="search-none" ng-show="searchBuildings.length == 0 && searchShops.length == 0">很抱歉，并无有关“{{kword}}”的搜索结果，请更换关键词重新搜索。</p> -->
+			<p class="cate-container-title">收藏的商场</p>
+			<!-- <p class="cate-container-notice" ng-show="isBuildingNull">暂无收藏的商场</p> -->
+			<ul class="collect-building-ul index-menu-user-ul seach-building-list" ng-show="likeBuilding||likeWxBuilding">
+	            <a href="#/building/{{i.cityid}}/{{i.id}}" ng-repeat="i in likeBuilding">
+	                <li class="collect-building-li">
+	                    <div class="collect-building-img">
+	                        <img ng-src="{{i.img | img}}" alt="">
+	                    </div>
+	                    <p class="collect-building-name">{{i.ch_name}}</p>
+	                </li>
+	            </a>
+	            <a href="#/building/{{i.city_id}}/{{i.poi_id}}" ng-show="uid" ng-repeat="i in likeWxBuilding">
+	                <li class="collect-building-li">
+	                    <div class="collect-building-img">
+	                        <img ng-src="{{i.pic_url | img}}" alt="">
+	                    </div>
+	                    <p class="collect-building-name">{{i.ch_name}}</p>
+	                </li>
+	            </a>
+	            <div class="clear"></div>
+	        </ul>
+			<p class="cate-container-title">收藏的商铺</p>
+			<!-- <p class="cate-container-notice" ng-show="isShopNull">暂无收藏的商铺</p> -->
+			<ul class="cate-container-ul" ng-show="likeShop||likeWxShop">
+				<a href="#/shop/{{i.cityid}}/{{i.id}}" ng-repeat="i in likeShop">
+					<li class="cate-container-li">
+						<div class="cate-container-logo">
+							<span><img src="{{i.img | logo}}" alt=""></span>
+						</div>
+						<div class="cate-container-p">
+							<p class="cate-container-name">{{i.ch_name}}</p>
+							<p class="cate-container-mall">{{i.buildingname}}{{i.floorname}}</p>
+						</div>	
+						<div class="clear"></div>
+					</li>
+				</a>
+				<a href="#/shop/{{i.city_id}}/{{i.poi_id}}" ng-show="uid" ng-repeat="i in likeWxShop">
+					<li class="cate-container-li">
+						<div class="cate-container-logo">
+							<span><img src="{{i.pic_url | logo}}" alt=""></span>
+						</div>
+						<div class="cate-container-p">
+							<p class="cate-container-name">{{i.ch_name}}</p>
+							<p class="cate-container-mall">{{i.buildingname}}{{i.floorname}}</p>
+						</div>	
+						<div class="clear"></div>
+					</li>
+				</a>
+			</ul>
+		</div>
+		<!-- <div class="ICPnumber"><a href="http://www.miitbeian.gov.cn/state/outPortal/loginPortal.action">苏州图云信息科技有限公司&nbsp;&nbsp;版权所有&nbsp;&nbsp;苏ICP备14053328号</a></div> -->
+	</div>
+</body>
+</html>

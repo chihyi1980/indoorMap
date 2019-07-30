@@ -1,0 +1,123 @@
+<ng-include src="'./html/com-nav.html'"></ng-include>
+<style>
+
+    .camera-icon{
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACT0lEQVRYR+2WQXbaMBCG/7Hz6LJi0Zpd3RPEN6hvEG7Q5AZgui/dF0hOUG4QegNzA3OCuruQLqIsUxJNn2Rem4CwRGjLBi+8kTTz6Z9/xibs+aE958cBwFsB8XneRohjMJUAlTJ7Nf0b5fMCEIN5H4SPloQS4AIcFCBVAmEBOprJblP6wjkBxOgmBv/85hvwzz7OjVoBSnCQg46+y26zXI3jBhjOJwBOtgcwJ76COQchBlMKYCJ7Uf9xrFqA6vZ3YzAlILzcCoIxQ9BIgUUMViNzlmm6FYA+I0Y3Anx/rCUE7mMojgGOQZyCEYPojRWMGk3thd/+WQKt+sNdgsH1KYi/bK4t35q1Bw2FBEAbpLuFu7LXOhfD+RjMKYIXic2cHgAbO2D14gUYJYgTcPBJq6TlNgoEjbHNgDqAG2B4lQP0zr/+PAWFfSiVLgEK2Yu0MvZKuQKLZ3UBl6DwrDKe6sgsaj8bwBhR1xF474Kt1vlCv2XW6gjtn2UpdgIwEMaMSkuZ1JaE6Uz2Xo+r7rm7hKIL+SHSs8SvBGJw1TEJAugRm9tm/tpopsZbqEVqAPXAIT0F0QZTpy651YSrwWUWrRl1Ke15NZx4KrOWnnJPHq2AzzfBEvxp29kAKl9U3bFp3c8vljb0UmB0nYDVJUDxfwGoDLU4MRONoFtKgHELwkRm0anvbW37nCUAUFTO1x1WJYXCxGUuXyg3wD9I+hjOCbBrjV1KHADqFWDM6r5kLnl91tcBRj9SPCiBsJH7TDKfJHV7nP8DuyZwnT8A7F2BX16BGzAavBU7AAAAAElFTkSuQmCC") center no-repeat;
+        background-size: 100% 100%;
+        cursor: pointer;
+        border:  2px  solid transparent;
+    }
+    .camera-icon:hover{
+        filter: grayscale(80%);
+    }
+</style>
+<div class="container">
+
+    <div class="row">
+
+        <div>
+            <ng-include src="'./html/com-menu.html'"></ng-include>
+        </div>
+
+        <div class="center-content">
+            <div class="shipperLoader">
+                <div class="col-lg-3">
+                    <ng-include src="'./html/left-menu.html'"></ng-include>
+                </div>
+                <div class="col-lg-9">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <ul class="nav nav-pills" role="tablist" >
+                                <li role="presentation" class="col-lg-7">
+                                    <div class="input-prepend input-group list-inline">
+                                        <span class="add-on input-group-addon"><i class="glyphicon glyphicon glyphicon-time"></i></span>
+                                        <input type="text" class="form-control dateShow"  id="datePicker" value="{{currentDateRange}}" readonly  style="text-align: center;"/>
+                                    </div>
+                                </li>
+                                <li>
+                                    <select ng-model="selectCamera"  class="form-control" ng-options="i.name for i in cameraOptions">
+                                        <option value="">全部</option>
+
+                                    </select>
+                                </li>
+                                <li role="presentation"  class="col-sm-2" style="text-align: center">
+                                    <button class="btn btn-primary" id='trackSearch' ng-click="searchData()">查詢</button>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="panel-body" id="mapContainer" style="min-height: 550px">
+                            <div class="search-content" ng-show="!isPageTypeChange && taggers && taggers.length">
+                                <table class="table table-hover" id="example" >
+                                    <thead>
+                                    <tr>
+                                        <th> # </th>
+                                        <th>拍攝時間</th>
+                                        <!--<th>创建时间</th>-->
+                                        <th>攝像頭名稱</th>
+                                        <th>用戶ID</th>
+                                        <th>查看視頻</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="tag in taggers" >
+                                        <td ng-class='{distinct:$index%2 == 0}' > {{$index + 1 + skip}}</td>
+                                        <!--<td>{{jMap[tagger.jobsiteId] || '-'}}</td>-->
+                                        <td>{{tag.time}}</td>
+                                        <!--<td>{{tagger.createAt || '-'}}</td>-->
+                                        <td>{{tag.cameraName}}</td>
+                                        <td>{{tag.userId}}</td>
+                                        <td style="text-indent: 20px;">
+                                            <span class="camera-icon" ng-click="videoOpen(tag)"></span>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <ul class="pagination" ng-show="true">
+                                    <li ng-class="{disabled: curPage == 1}" ng-click="setPageNum(1)"><a><span>第一頁</span></a></li>
+                                    <li ng-class="{disabled: curPage == 1}" ng-click="setPageNum(curPage - 1)"><a><span>上一頁</span></a></li>
+                                    <li ng-repeat='num in pageNums' ng-class='{active:num == curPage}'  ng-click="setPageNum(num)"><a><span>{{num}}</span></a></li>
+                                    <li ng-class="{disabled: curPage == totalPages || totalPages == 1}"  ng-click="setPageNum(curPage + 1)"><a><span>下一頁</span></a></li>
+                                    <li ng-class="{disabled: curPage == totalPages || totalPages == 1}"  ng-click="setPageNum(totalPages)"><a><span>最後頁</span></a></li>
+                                </ul>
+                            </div>
+                            <div class="panel panel-default" ng-show="isPageTypeChange">
+                                <div class="panel-body" style="padding-left: 10%;height: 300px">
+                                    <br>
+                                    <h3><span class="label label-default">選擇場地 >  選擇日期 > 查詢 </span></h3>
+                                    <br>
+                                    <h3><span class="label label-default">選擇人員 >  選擇日期 > 查詢</span></h3>
+                                    <br>
+                                    <h4><span class="text-primary">備注：數據可即時查詢</span></h4>
+                                </div>
+                            </div>
+                            <div ng-show="!isPageTypeChange && taggers && !taggers.length">
+                                <h1 class="text-danger">no data!</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div><!-- /col-xs-9 -->
+
+    </div><!-- /row -->
+
+</div> <!-- /container -->
+<div id="modal-container">
+
+</div>
+<div id="videoModal" class="cc-modal fade">
+    <div class="cc-content" style="text-align: center;">
+        <div style="width: 480px; height: 300px;padding: 5px; box-sizing: border-box">
+            <iframe  id="demoIframe" src="" style="width: 100%;height: 100%;">
+
+            </iframe>
+        </div>
+    </div>
+</div>
+
+<ng-include src="'./html/com-footer.html'"></ng-include>

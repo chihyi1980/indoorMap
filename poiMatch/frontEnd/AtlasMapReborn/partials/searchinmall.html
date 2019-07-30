@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<title>Atlas Mall</title>
+</head>
+<body>
+	<div id="content">
+		<div class="index-nav nav-position">
+			<h1>{{kword}}</h1>
+			<img src="./img/icon-back.png" alt="" class="icon-menu-back" onclick="history.go(-1)" >
+		</div>
+		<div class="cate-container">
+			<p class="search-none" ng-show="searchMall.length == 0">很抱歉，并无有关“{{kword}}”的搜索结果，请更换关键词重新搜索。</p>
+			<ul class="cate-container-ul">
+				<a href="#/shop/{{cityId}}/{{searchmall.poi_id}}" ng-repeat="searchmall in searchMall">
+					<li class="cate-container-li">
+						<div class="cate-container-logo">
+							<span><img ng-src="{{searchmall.logo.key | logo}}" alt=""></span>
+						</div>
+						<div class="cate-container-p">
+							<p class="cate-container-name">{{searchmall.displayName || searchmall.ch_name}}
+							<span class="span-coupon" ng-show="searchmall.hasCoupon == true">团</span>
+	                        <span class="span-discount" ng-show="searchmall.hasDiscount == true">慧</span>
+	                        <span class="span-book" ng-show="searchmall.hasOrder == true">订</span></p>
+							<p class="cate-container-mall">{{searchmall.building.ch_name}}{{searchmall.floor.ch_name}}</p>
+						</div>					
+						<div class="clear"></div>
+					</li>
+				</a>
+			</ul>
+		</div>
+		<!-- <div class="ICPnumber"><a href="http://www.miitbeian.gov.cn/state/outPortal/loginPortal.action">苏州图云信息科技有限公司&nbsp;&nbsp;版权所有&nbsp;&nbsp;苏ICP备14053328号</a></div> -->
+	</div>
+</body>
+</html>

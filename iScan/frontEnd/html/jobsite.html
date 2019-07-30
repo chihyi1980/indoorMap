@@ -1,0 +1,229 @@
+
+<ng-include src="'./html/com-nav.html'"></ng-include>
+<div class="container">
+
+    <div class="row">
+
+        <div>
+            <ng-include src="'./html/com-menu.html'"></ng-include>
+        </div>
+
+        <div class="center-content">
+            <div class="col-lg-3">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <div class="input-group">
+                            <input type="text"  ng-model="jobsiteQuery" class="form-control" placeholder="場地列表">
+                            <span class="input-group-btn">
+                                <button class="btn btn-success" type="button" ng-click="leftSearch(jobsiteQuery, 1)"><i class="glyphicon glyphicon-search"></i></button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="panel-body " style="min-height: 400px; background-color: #FAFAF5">
+                        <ul class="list-group search-list" ng-show="!!jobsites">
+                            <li class="list-group-item text-primary" ng-repeat="jobsite in jobsites" ng-class="{active: curJobsite == jobsite}"
+                                style="cursor: pointer" ng-click="selectCurJobsite(jobsite, $event.target);getPlayers(jobsite, $event.target)">
+                                {{jobsite.name}}
+                            </li>
+                        </ul>
+                        <ul class="pagination" style="padding: 0;margin: 0;width: 100%;">
+                            <li ng-class="{disabled: curPageOfJobsite == 1}" ng-click="setLeftPageNum(jobsiteQuery, 1)"><a><span>首頁</span></a></li>
+                            <li ng-class="{disabled: curPageOfJobsite == 1}" ng-click="setLeftPageNum(jobsiteQuery, curPageOfJobsite - 1)"><a><span>&nbsp;《&nbsp;&nbsp;</span></a></li>
+                            <li ng-class="{disabled: curPageOfJobsite == totalPagesOfJobsite || totalPagesOfJobsite == 1}"  ng-click="setLeftPageNum(jobsiteQuery, curPageOfJobsite + 1)"><a><span>&nbsp;&nbsp;》&nbsp;</span></a></li>
+                            <li ng-class="{disabled: curPageOfJobsite == totalPagesOfJobsite || totalPagesOfJobsite == 1}"  ng-click="setLeftPageNum(jobsiteQuery, totalPagesOfJobsite)"><a><span>尾頁</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="panel panel-default" ng-show="showMatch" style="min-height: 500px">
+                    <div class="panel-heading">
+                        <h3>匹配場地
+                        <span class="glyphicon glyphicon-remove-circle"
+                              style="float: right;cursor: pointer" ng-click="closeMatch()"></span>
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <div>
+                            <h4 class="panel-heading panel-danger text-danger"><strong>場地資訊&nbsp;&nbsp;</strong>
+                                <span class="text-info">{{curJobsite.id}}</span>
+                                <span class="glyphicon glyphicon-trash text-primary pull-right" title="删除" style="cursor: pointer" ng-click="removeJobsite(curJobsite, curIscans)"></span>
+                            </h4><br/>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">場地名稱</label>
+                                <div class="col-sm-6" ng-show="isEdit">
+                                    <input class="form-control" ng-model="newJobsiteName" type="text" value="{{curJobsite.name}}"/>
+                                </div>
+                                <div class="col-sm-6" ng-show="!isEdit">
+                                    {{curJobsite.name}}
+                                </div>
+                                <div class="col-sm-3" style="font-size: 20px;letter-spacing:10px">
+                                    <span class="glyphicon glyphicon-edit" title="編輯" style="cursor: pointer;color: #080808" ng-click="editJobsite()"></span>
+                                    <span class="glyphicon glyphicon-floppy-save" title="保存" style="cursor: pointer;color: #4cae4c" ng-show="isEdit" ng-click="saveEdit(curJobsite, newJobsiteName)"></span>
+                                </div>
+                            </div><br/>
+                            <hr/>
+                            <!--
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">所在地區</label>
+                                <div class="col-sm-8">
+                                    {{curJobsite.area.replace('|', '').replace('|', '').replace('|', '')}}
+                                </div>
+                            </div><br/>
+                            <hr/>
+                            -->
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">詳細地址</label>
+                                <div class="col-sm-8">
+                                    {{curJobsite.address}}
+                                </div>
+                            </div><br/><hr/>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label"><span class="badge">設置地圖ID</span></label>
+                                <div class="col-sm-6">
+                                    <input class="form-control" ng-model="indoorMapId" ng-keyup="checkValue()" id="indoorMapId" type="text" value="{{curJobsite.mapId}}"/>
+                                </div>
+                                <div class="col-sm-3" style="font-size: 20px;letter-spacing:10px">
+                                    <span class="glyphicon glyphicon-floppy-save" title="保存" style="cursor: pointer;color: #4cae4c" ng-click="setIndoorMapId(indoorMapId)"></span>
+                                </div>
+                            </div><br/><br/><br/>
+                            <div  class="form-group">
+                                <label class="col-sm-3"></label>
+                                <div class="col-md-6" ng-init="">
+                                    <button class="btn btn-warning form-control" ng-disabled="getDisableStatus(curJobsite.mapId)" ng-click="showIscanMatchModal()" data-toggle="modal" data-target="#iscanMatch-modal">配置iscan</button>
+                                </div>
+                            </div><br/>
+                            <hr/>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-success" ng-show="!showMatch && !showMatched">
+                    <div class="panel-heading ">
+                        <h3>新增場地
+                            <!--
+                            <button class="btn btn-warning pull-right" ng-click="showUploadModal()"><span class="glyphicon glyphicon-cloud-upload"> 上傳場地</span></button>
+                            -->
+                        </h3>
+                    </div>
+                    <div class="panel-body " style="min-height: 455px; padding: 20px; background-color: #FAFAF5">
+                        <form class="form-horizontal" role="form" name="jobsiteForm">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">場地名稱</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" ng-model="newJobsite.name" placeholder="場地名稱" required>
+                                </div>
+                            </div><hr/>
+                            <!--
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">所在地區</label>
+                                <div class="col-sm-6">
+                                    <div  style="padding-left: 0">
+                                        <select required="" class="form-control" ng-model="address.province" ng-options="key as key for (key,value) in division"
+                                                ng-change="address.city='';address.district='';">
+                                            <option value="">省</option>
+                                        </select>
+                                    </div>
+                                    <div  >
+                                        <select class="form-control" ng-model="address.city" ng-options="key as key for (key,value) in division[address.province]"
+                                                ng-change="address.district='';">
+                                            <option value="">市</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <select class="form-control" ng-model="address.district" ng-options="value as value for value in division[address.province][address.city]"
+                                                required="required">
+                                            <option value="">區</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            -->
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">詳細地址</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" ng-model="newJobsite.address" placeholder="詳細地址" required>
+                                </div>
+                            </div>
+                            <hr/>
+                            <div class="form-group">
+                                <div class="col-sm-6 control-label">
+                                    <button type="reset"  class="btn btn-default">取消</button> &nbsp;&nbsp;&nbsp;
+                                    <button type="button" class="btn btn-primary" ng-disabled="jobsiteForm.$invalid" ng-click="saveAdd()">新增</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- /col-xs-9 -->
+    </div><!-- /row -->
+</div>
+<div class="modal fade modal-custom" id="iscanMatch-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header row">
+                <div class="col-md-3">
+                    <h4 class="modal-title text-danger" id="myLargeModalLabel">
+                        <span  class="label label-success" style="margin-left: 10px;font-weight: bold;">{{curJobsite.name}}</span>
+                        <span class="badge">匹配iscan</span>
+                    </h4>
+                </div>
+                <div class="col-md-8 row">
+                    <div class="dropdown btn-group">
+                        <button id="dLabel" type="button" class="btn btn-warning" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            选择楼层
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dLabel">
+                            <li ng-repeat="f in mapfloorList"><a ng-click="loadMap(f)">{{f.name}}</a></li>
+                        </ul>
+                    </div>
+                    <div class="btn-group" ng-show="!!curMapFloor">
+                        <h4  class="text-primary" style="margin-left: 10px;font-weight: bold;"> {{curMapFloor.name}}</h4>
+                    </div>
+                </div>
+                <div class="col-md-1 text-left">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+            </div>
+            <div class="modal-body" style="padding-top: 5px; padding-left: 0px;">
+                <div class="container-fluid">
+                    <div class="col-md-3">
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <div class="input-group">
+                                    <input type="text"  ng-model="iscanQuery" class="form-control" placeholder="iScan列表">
+                            <span class="input-group-btn">
+                                <button class="btn btn-danger" type="button" ng-click="rightSearch(iscanQuery, 1)"><i class="glyphicon glyphicon-search"></i></button>
+                            </span>
+                                </div>
+                            </div>
+                            <div class="panel-body" style="min-height: 400px; background-color: #FAFAF5">
+                                <ul class="list-group search-list" ng-show="!!beacons">
+                                    <li class="list-group-item text-primary" ng-repeat="beacon in beacons" ng-class="{inUsed: beacon.floorId != null}" title=""
+                                        style="cursor: pointer" ng-click="selectCurBeacon(beacon, $event)" ng-mouseup="rclickBeacon(beacon, $event)">
+                                        {{beacon.iscanId}} {{iscanPos[beacon.iscanId].desc || iscanPos[beacon.iscanId].address }}
+                                    </li>
+                                </ul>
+                                <ul class="pagination" style="padding: 0;margin: 0;width: 100%;">
+                                    <li ng-class="{disabled: curPageOfBeacon == 1}" ng-click="setRightPageNum(iscanQuery, 1)"><a><span>首&nbsp;頁</span></a></li>
+                                    <li ng-class="{disabled: curPageOfBeacon == 1}" ng-click="setRightPageNum(iscanQuery, curPageOfBeacon - 1)"><a><span>&nbsp;《&nbsp;&nbsp;</span></a></li>
+                                    <li ng-class="{disabled: curPageOfBeacon == totalPagesOfBeacon || totalPagesOfBeacon == 1}"  ng-click="setRightPageNum(iscanQuery, curPageOfBeacon + 1)"><a><span>&nbsp;&nbsp;》&nbsp;</span></a></li>
+                                    <li ng-class="{disabled: curPageOfBeacon == totalPagesOfBeacon || totalPagesOfBeacon == 1}"  ng-click="setRightPageNum(iscanQuery, totalPagesOfBeacon)"><a><span>尾&nbsp;頁</span></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-9"  id="modal-map-container" style="min-height: 450px;padding: 10px; border: solid #080808 2px;">
+                        <div id="atlas-map">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-include src="'./html/com-footer.html'"></ng-include>

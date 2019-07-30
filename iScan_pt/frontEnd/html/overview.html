@@ -1,0 +1,121 @@
+
+<ng-include src="'./html/com-nav.html'"></ng-include>
+<div class="container">
+
+    <div class="row">
+
+        <div>
+            <ng-include src="'./html/com-menu.html'"></ng-include>
+        </div>
+
+        <div class="center-content">
+            <div class="shipperLoader">
+                <div class="col-lg-3">
+                    <ng-include src="'./html/left-menu.html'"></ng-include>
+                </div>
+                <div class="col-lg-9">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <ul class="nav nav-pills" role="tablist">
+                                <li role="presentation" class="col-lg-5">
+                                    <div class="input-prepend input-group list-inline">
+                                        <span class="add-on input-group-addon"><i class="glyphicon glyphicon glyphicon-time"></i></span>
+                                        <input type="text" class="form-control dateShow"  id="datePicker" value="{{currentDateRange}}" readonly class="span4" style="text-align: center"/>
+                                    </div>
+                                </li>
+
+                                <li role="presentation"  class="col-sm-3" style="text-align: center">
+                                    <button class="btn btn-primary" id='overviewSearch' ng-click="{true: searchDataByJobsiteId(), false: searchDataByUserId()}[curPageType == 'jobsite']">Procurar</button>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="panel-body" style="min-height: 365px">
+                            <div class="btn-group" role="group" aria-label="..." ng-show="false">
+                                <button type="button" class="btn btn-default" ng-class="{active: curChartType == 'bar'}" ng-click="drawBarChart()">數據表</button>
+                                <button type="button" class="btn btn-default" ng-class="{active: curChartType == 'pillar'}" ng-click="drawPillarChart()">統計圖</button>
+                            </div>
+                            <div id='chart-render'>
+                            </div>
+                            <div class="search-content" ng-show="taggers && taggers.length">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" style="text-align: right">
+                                        <button class="btn btn-warning"  ng-disabled='!isExport' ng-click="exportData()"><span class="glyphicon glyphicon-download"></span> Excel數據</button>
+                                    </div>
+                                    <table class="table" style="table-layout: fixed;width: 100%">
+                                        <thead>
+                                        <tr>
+                                            <th style="width: 30px"> # </th>
+                                            <th style="width: 50px">日期</th>
+                                            <th style="width: 70px">{{curPageType == 'jobsite' ? 'Nome do Local' : '人員名稱'}}</th>
+                                            <th style="width: 70px">{{curPageType == 'jobsite' ? '人員名稱' : '所在工地'}}</th>
+                                            <th style="width: 50px">首次入場時刻</th>
+                                            <th style="width: 50px">最後離場時刻</th>
+                                            <th style="width: 50px">入場時長</th>
+                                            <!--
+                                            <th style="width: 40px">地理位置</th>
+                                            -->
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr ng-repeat="tagger in taggers">
+                                            <td> {{$index+1}}</td>
+                                            <td>{{tagger.date}}</td>
+                                            <td ng-init="tagger.rId = (curPageType == 'jobsite' ?jMap[tagger.recordId] : tagger.recordId)">{{tagger.rId}}</td>
+                                            <td colspan="4" style="width: 200px">
+                                                <table style="width:100%; padding: 0;" class="table-hover">
+                                                    <tr ng-repeat="worker in tagger.record" ng-class="getStyle($index)">
+                                                        <td style="width: 28%">{{worker.name}}</td>
+                                                        <td style="width: 24%;text-align: center">{{worker.begin}}</td>
+                                                        <td style="width: 24%;text-align: center">{{worker.end}}</td>
+                                                        <td style="width: 24%;text-align: center">{{worker.sum}}</td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                            <!--
+                                            <td style="text-align: center">
+                                                <span style="font-size: 20px;color: green;cursor: pointer" class="glyphicon glyphicon-map-marker" ng-click="showGDMap(tagger.record[0].lat, tagger.record[0].lon)"></span>
+                                            </td>-->
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="panel panel-default" ng-show="!taggers">
+                                <div class="panel-body" style="padding-left: 10%;height: 300px">
+                                    <br>
+                                    <h3><span class="label label-default">Selecione Local > Selecionar Data > Consulta</span></h3>
+                                    <br>
+                                    <h3><span class="label label-default">Selecione Pessoa > Selecionar Data > Consulta</span></h3>
+                                    <br>
+                                    <h4><span class="text-primary">Os dados da análise do dia só podem ser visualizados no dia seguinte</span></h4>
+                                </div>
+                            </div>
+                            <div ng-show="taggers && taggers == 0">
+                                <h1 class="text-danger">no data!</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div><!-- /col-xs-9 -->
+
+    </div><!-- /row -->
+
+</div> <!-- /container -->
+<div id="attrDiv" class="">
+    <div class="content" >
+        <div class="panel panel-default">
+            <div class="panel-heading" style="text-align: right">
+                <div id="map-address" style="float: left;font-size: 14px;width: 80%;overflow-y:hidden;overflow-x:auto;text-align: left;color: #285e8e;font-weight: 700 "> </div>
+                <span class="glyphicon glyphicon-remove-circle closeModel" ng-click="closeGDMap()"></span>
+            </div>
+            <div class="panel-body " style="min-height: 350px; background-color: #FAFAF5">
+                <div id="iCenter"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-include src="'./html/com-footer.html'"></ng-include>
+

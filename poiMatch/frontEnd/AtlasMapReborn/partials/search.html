@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<title>Atlas Mall</title>
+</head>
+<body>
+	<div id="content">
+		<div class="index-nav nav-position">
+			<h1>{{kword}}</h1>
+			<img src="./img/icon-back.png" alt="" class="icon-menu-back" onclick="history.go(-1)" >
+		</div>
+		<div class="cate-container">
+			<p class="search-none" ng-show="searchAll.malls.length == 0 && searchAll.shops.length == 0">很抱歉，并无有关“{{kword}}”的搜索结果，请更换关键词重新搜索。</p>
+			<p class="cate-container-title" ng-show="searchAll.malls.length > 0">搜索的商场</p>
+			<ul class="collect-building-ul index-menu-user-ul seach-building-list" ng-show="searchAll.malls.length > 0">
+	            <a href="#/home/{{cityId}}?mallid={{searchbuilding.poi_id}}" ng-repeat="searchbuilding in searchAll.malls">
+	                <li class="collect-building-li">
+	                    <div class="collect-building-img">
+	                        <img ng-src="{{searchbuilding.buildings[0].pics[0].key | img}}" alt="">
+	                    </div>
+	                    <p class="collect-building-name">{{searchbuilding.ch_name}}</p>
+	                </li>
+	            </a>
+	            <div class="clear"></div>
+	        </ul>
+			<p class="cate-container-title" ng-show="searchAll.shops.length > 0">搜索的商铺</p>
+			<ul class="cate-container-ul" ng-show="searchAll.shops.length > 0">
+				<a href="#/shop/{{cityId}}/{{searchshop.poi_id}}" ng-repeat="searchshop in searchAll.shops">
+					<li class="cate-container-li">
+						<div class="cate-container-logo">
+							<span><img src="{{searchshop.logo.key | logo}}" alt=""></span>
+						</div>
+						<div class="cate-container-p">
+							<p class="cate-container-name">{{searchshop.ch_name}} <span ng-show="searchshop.en_name">（{{searchshop.en_name}}）</span>
+							<span class="span-coupon" ng-show="searchshop.hasCoupon == true">团</span>
+	                        <span class="span-discount" ng-show="searchshop.hasDiscount == true">慧</span>
+	                        <span class="span-book" ng-show="searchshop.hasOrder == true">订</span></p>
+							<p class="cate-container-mall">{{searchshop.mall.ch_name}}{{searchshop.floor.ch_name}}</p>
+							<p class="cate-container-location">距离我{{searchshop.location.substring(0,searchshop.location.length-3)}}km</p>
+						</div>	
+						<div class="clear"></div>
+					</li>
+				</a>
+			</ul>
+		</div>
+		<div class="pagination">
+			<a class="pagination-up" ng-show="pagination_up" href="#/search/{{cityId}}/{{kword}}/{{pageup}}">上一页</a>
+			<a class="pagination-down" ng-show="pagination_down" href="#/search/{{cityId}}/{{kword}}/{{pagedown}}">下一页</a>
+			<div class="clear"></div>
+		</div>
+		<!-- <div class="ICPnumber"><a href="http://www.miitbeian.gov.cn/state/outPortal/loginPortal.action">苏州图云信息科技有限公司&nbsp;&nbsp;版权所有&nbsp;&nbsp;苏ICP备14053328号</a></div> -->
+	</div>
+</body>
+</html>

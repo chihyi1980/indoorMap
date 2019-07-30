@@ -1,0 +1,85 @@
+<div class="panel panel-success" ng-controller="leftMenuCtrl">
+    <div class="panel-heading">
+        <ul class="nav nav-pills" role="tablist">
+            <li role="presentation" id="jobsiteTab"><a ng-click="changePageType('jobsite')" ng-class="{true:'btn btn-primary', false: 'btn btn-default'}[curPageType == 'jobsite']"><span class="glyphicon glyphicon-home">Mapa</span></a></li>
+            <li role="presentation" id="userTab"><a ng-click="changePageType('user')" ng-class="{true:'btn btn-primary', false: 'btn btn-default'}[curPageType == 'user']"><span class="glyphicon glyphicon-user">Pessoas</span></a></li>
+        </ul>
+    </div>
+    <div class="panel-body">
+        <div class="form-group">
+            <!--
+            <div class="col-lg-12 control-label">
+                <h3><span class="label label-default">地址</span></h3>
+            </div>
+            <div class="col-lg-12">
+                <select required="" class="form-control" ng-model="address.province" ng-options="key as key for (key,value) in division"
+                        ng-change="address.city='';address.district='';">
+                    <option value="">省</option>
+                </select>
+                <select class="form-control" ng-model="address.city" ng-options="key as key for (key,value) in division[address.province]"
+                        ng-change="address.district='';">
+                    <option value="">市</option>
+                </select>
+                <select class="form-control" ng-model="address.district" ng-options="value as value for value in division[address.province][address.city]"
+                        ng-change="">
+                    <option value="">區</option>
+                </select>
+            </div>-->
+
+            <div class="col-lg-12 control-label" ng-show="!!(curPageType == 'jobsite')">
+                <div class="input-group">
+                    <input type="text"  ng-model="jobsitesQuery" class="form-control">
+                    <span class="input-group-btn">
+                        <button class="btn btn-danger" type="button" ng-click="searchData(jobsitesQuery, 1)"><i class="glyphicon glyphicon-search"></i></button>
+                    </span>
+                </div>
+            </div>
+
+
+
+            <div class="col-lg-12" ng-show="!!(curPageType == 'jobsite')">
+                <div class="row" style="padding: 5px">
+                    <ul class="list-group search-list" ng-show="!!jobsites">
+                        <li class="list-group-item text-primary" ng-repeat="jobsite in jobsites" ng-class="{active: curJobsite == jobsite}"
+                            style="cursor: pointer" ng-click="selectCurJobsite(jobsite, $event.target)">
+                            {{jobsite.name}}
+                        </li>
+                    </ul>
+                    <ul class="pagination " style="padding: 0;margin: 0;width: 100%;white-space:nowrap !important;">
+                        <li ng-class="{disabled: curPage == 1}" ng-click="setLeftPageNum(jobsitesQuery, 1)"><a><span>Primeira Página</span></a></li>
+                        <li ng-class="{disabled: curPage == 1}" ng-click="setLeftPageNum(jobsitesQuery, curPage - 1)"><a><span>&nbsp;《&nbsp;</span></a></li>
+                        <li ng-class="{disabled: curPage == totalPages || totalPages == 1 || totalPages == 0}"  ng-click="setLeftPageNum(jobsitesQuery, curPage + 1)"><a><span>&nbsp;》&nbsp;</span></a></li>
+                        <li ng-class="{disabled: curPage == totalPages || totalPages == 1 || totalPages == 0}"  ng-click="setLeftPageNum(jobsitesQuery, totalPages)"><a><span>Última Página</span></a></li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="col-lg-12 control-label" ng-show="!!(curPageType == 'user')">
+                <div class="input-group">
+                    <input type="text"  ng-model="userQuery" class="form-control">
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-success" type="button" ng-click="searchData(userQuery, 1)"><i class="glyphicon glyphicon-search"></i></button>
+                                        </span>
+                </div><!-- /input-group -->
+            </div>
+            <div class="col-lg-12" ng-show="!!(curPageType == 'user')">
+                <div class="row" style="padding: 5px">
+                    <ul class="list-group search-list" ng-show="!!devices">
+                        <li class="list-group-item text-primary" ng-repeat="device in devices" ng-class="{active: curDevice.userId == device.userId}"
+                            style="cursor: pointer" ng-click="selectCurDevice(device, $event.target)">
+                            {{device.userId}}
+                        </li>
+                    </ul>
+                    <ul class="pagination" style="padding: 0;margin: 0;width: 100%;">
+                        <li ng-class="{disabled: curPage == 1}" ng-click="setLeftPageNum(userQuery, 1)"><a><span>Primeira Página</span></a></li>
+                        <li ng-class="{disabled: curPage == 1}" ng-click="setLeftPageNum(userQuery, curPage - 1)"><a><span>&nbsp;《&nbsp;</span></a></li>
+                        <li ng-class="{disabled: curPage == totalPages || totalPages == 1 || totalPages == 0}" ng-click="setLeftPageNum(userQuery, curPage + 1)"><a><span>&nbsp;》&nbsp;</span></a></li>
+                        <li ng-class="{disabled: curPage == totalPages || totalPages == 1 || totalPages == 0}"  ng-click="setLeftPageNum(userQuery, totalPages)"><a><span>Última Página</span></a></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

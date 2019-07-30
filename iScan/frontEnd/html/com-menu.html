@@ -1,0 +1,12 @@
+<ul class="nav nav-tabs nav-menu" role="tablist" ng-controller="menuCtrl">
+    <!--<li role="presentation" ng-class="{active: curPath == '/user'}"><a href="#/user"><span class="glyphicon glyphicon-globe text-info">系统用户-User</span></a></li>-->
+    <li ng-show="features.indoorMap" role="presentation" ng-class="{active: curPath.indexOf('indoorMap') > -1}"><a href="#/indoorMap"><span class="glyphicon glyphicon-map-marker text-info">室內地圖</span></a></li>
+    <li role="presentation" ng-class="{active: curPath.indexOf('tagger') > -1}"><a href="#/tagger/1"><span class="glyphicon glyphicon-map-marker text-danger">定位資訊</span></a></li>
+    <!--<li role="presentation" ng-class="{active: curPath.indexOf('events') > -1}"><a href="#/events"><span class="glyphicon glyphicon-envelope text-warning">通報管理</span></a></li>-->
+    <li role="presentation" ng-class="{active: curPath.indexOf('monitor') > -1}"><a href="#/monitor"><span class="glyphicon glyphicon-film text-warning">攝像監控</span></a></li>
+    <li role="presentation" ng-class="{active: curPath.indexOf('overview') > -1}"><a href="#/overview"><span class="glyphicon glyphicon-stats text-message">數據統計</span></a></li>
+    <li role="presentation" ng-class="{active: curPath.indexOf('analysis') > -1}"><a href="#/analysis"><span class="glyphicon glyphicon-picture text-analysis">每日分析</span></a></li>
+    <li role="presentation" ng-class="{active: curPath.indexOf('device') > -1}"><a href="#/device/1"><span class="glyphicon glyphicon-phone text-success">用戶設備</span></a></li>
+    <li role="presentation" ng-class="{active: curPath.indexOf('beacon') > -1}"><a href="#/beacon/1"><span class="glyphicon glyphicon-screenshot text-warning">定位装置</span></a></li>
+    <li role="presentation" ng-class="{active: curPath == '/jobsite'}" ><a href="#/jobsite"><span class="glyphicon glyphicon-home text-primary">配置場地</span></a></li>
+</ul>

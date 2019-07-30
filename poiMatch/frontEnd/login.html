@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>登录</title>
+    <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link href="public/css/signin.css" rel="stylesheet" type="text/css">
+
+</head>
+
+<body>
+<div class="container">
+        <form class="form-signin" action="<%=prefix%>/login" method="post">
+            <h2 class="form-signin-heading">用户登录</h2>
+            <label for="inputName" class="sr-only">名称</label>
+            <input type="text" id="inputName" name="ume" class="form-control" placeholder="名称" required autofocus>
+            <label for="inputPassword" class="sr-only">密码</label>
+            <input type="password" id="inputPassword" name="pwd" class="form-control" placeholder="密码" required>
+            <div class="checkbox">
+                <% if(typeof(message)!=='undefined'){%>
+                <label class="text-danger" style="background:#ddd9b4;font-weight: bold">
+                    <%=message%>
+                </label>
+                <%}%>
+            </div>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">登 录</button>
+        </form>
+
+</div> <!-- /container -->
+</body>
+</html>

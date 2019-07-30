@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Atlas Mall</title>
+</head>
+<body>
+    <div id="content">
+        <div class="index-nav nav-position" style="padding-top:10px;padding-left:30%;">
+            <ul class="eat-nav-tab">
+                <li class="eat-nav-tab-shop" ng-click="changeTab('shanghu')" ng-show="tabType=='shanghu'" id="eat-nav-selected">商户</li>
+                <li class="eat-nav-tab-shop" ng-click="changeTab('shanghu')" ng-show="tabType!='shanghu'">商户</li>
+                <li class="eat-nav-tab-coupon" ng-click="changeTab('tuangou')" ng-show="tabType=='tuangou'" id="eat-nav-selected" style="border-radius:0px 5px 5px 0px;">团购</li>
+                <li class="eat-nav-tab-coupon" ng-click="changeTab('tuangou')" ng-show="tabType!='tuangou'">团购</li>
+                <div class="clear"></div>
+            </ul>
+            <img src="./img/icon-back.png" alt="" class="icon-menu-back" onclick="history.go(-1)" >
+        </div>
+        <div class="eat-container-shop" ng-show="tabType=='shanghu'">
+            <ul class="eat-shop-ul">
+                <a href="#/shop/{{hotkey.poi_id}}" ng-repeat="hotkey in searchHotkey">
+                    <li class="eat-shop-li">
+                        <img ng-src="{{hotkey.logo.key | logo}}" alt="" class="eat-shop-logo">
+                        <div class="eat-shop-detail">
+                            <p class="eat-shop-title">{{hotkey.ch_name}}
+                            <span class="span-coupon" ng-show="hotkey.hasCoupon == true">团</span>
+                            <span class="span-discount" ng-show="hotkey.hasDiscount == true">慧</span>
+                            <span class="span-book" ng-show="hotkey.hasOrder == true">订</span></p>
+                            <p class="eat-shop-add"><img src="./img/icon-shoplist-indoor.png" alt="" class="icon-shoplist-indoor">{{hotkey.building.ch_name}}{{hotkey.floor.ch_name}}（地图）</p>
+                        </div>
+                        <div class="clear"></div>
+                    </li>
+                </a>
+            </ul>
+        </div>
+        <div class="eat-container-coupon" ng-show="tabType=='tuangou'">
+            <div class="eat-coupon-div" ng-repeat="hotkey in searchHotkey" ng-show="hotkey.hasCoupon == true">
+                <a href="#/shop/{{hotkey.poi_id}}">
+                    <div style="position:relative;">
+                        <p class="eat-coupon-title">{{hotkey.ch_name}}（{{hotkey.building.ch_name}}）</p>
+                        <img src="./img/icon-home-departtri.jpg" alt="" class="icon-eat-coupon-title">
+                    </div>
+                </a>
+                <ul class="eat-coupon-ul">
+                    <a href="#/coupon?url={{coupon.web_url}}&shopname={{hotkey.ch_name}}" ng-repeat="coupon in hotkey.coupons">
+                        <li class="eat-coupon-li">
+                            <img ng-src="{{coupon.pic_url}}" alt="" class="eat-coupon-img">
+                            <div class="eat-coupon-detail">
+                                <p class="eat-coupon-text">{{coupon.desc}}</p>
+                                <p class="eat-coupon-type">
+                                </p>
+                            </div>
+                            <div class="clear"></div>
+                        </li>
+                    </a>
+                </ul>
+            </div>
+        </div>
+        <!-- <div class="ICPnumber"><a href="http://www.miitbeian.gov.cn/state/outPortal/loginPortal.action">苏州图云信息科技有限公司&nbsp;&nbsp;版权所有&nbsp;&nbsp;苏ICP备14053328号</a></div> -->
+    </div>
+</body>
+</html>

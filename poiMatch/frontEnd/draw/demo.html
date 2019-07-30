@@ -1,0 +1,144 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SVG 贝塞尔曲线控制</title>
+    <script src="http://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+
+    <style>
+        body{
+            background: #ccc;
+            font-family: 'Microsoft YaHei';
+            font-size: 20px;
+            color: #345;
+        }
+        .svg-inner{
+            width: 700px;
+            height: 400px;
+            margin: 100px auto;
+            background: #fff;
+        }
+        #cnzz_stat_icon_1254030493{
+            display: none;
+        }
+        circle{
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="svg-inner no1">
+    <svg width='100%' height='100%'>
+        <path d="M200 250 C300 150 400 150 500 250" style="fill:rgba(0,0,0,0);stroke:#345;stroke-width:3" id="path"/>
+        <circle cx=300 cy=150 r=3 style="fill:rgba(200,200,200,1);stroke:rgba(200,200,200,1);stroke-width:3" id="control1"/>
+        <circle cx=400 cy=150 r=3 style="fill:rgba(200,200,200,1);stroke:rgba(200,200,200,1);stroke-width:3" id="control2"/>
+        <circle cx=200 cy=250 r=3 style="fill:rgba(200,200,200,1);stroke:rgba(200,200,200,1);stroke-width:3" id="control3"/>
+        <circle cx=500 cy=250 r=3 style="fill:rgba(200,200,200,1);stroke:rgba(200,200,200,1);stroke-width:3" id="control4"/>
+        <polyline points="200,250 300,150 400,150 500,250" style="fill:rgba(200,200,200,0);stroke:rgba(200,200,200,1);stroke-width:1" id="polyline"/>
+        <text x="180" y="320" id="text1">M200 250 C300 150 400 150 500 250</text>
+        <text x="250" y="50">三次贝塞尔曲线控制</text>
+        <path d="M400 400 L400 300 A400 400 360 0 1 500 400 Z"/>
+    </svg>
+</div>
+<div class="svg-inner no2">
+    <svg width='100%' height='100%'>
+        <path d="M200 250 Q350 150 500 250" style="fill:rgba(0,0,0,0);stroke:#345;stroke-width:3" id="path"/>
+        <circle cx=200 cy=250 r=3 style="fill:rgba(200,200,200,1);stroke:rgba(200,200,200,1);stroke-width:3" id="control1"/>
+        <circle cx=350 cy=150 r=3 style="fill:rgba(200,200,200,1);stroke:rgba(200,200,200,1);stroke-width:3" id="control2"/>
+        <circle cx=500 cy=250 r=3 style="fill:rgba(200,200,200,1);stroke:rgba(200,200,200,1);stroke-width:3" id="control3"/>
+        <polyline points="200,250 350,150 500,250" style="fill:rgba(200,200,200,0);stroke:rgba(200,200,200,1);stroke-width:1" id="polyline"/>
+        <text x="220" y="320" id="text1">M200 250 Q350 150 500 250</text>
+        <text x="250" y="50">二次贝塞尔曲线控制</text>
+        <g id="selectorGroup0" transform="rotate(-160,368.9545288085938,195.81817626953122)" display="inline"><path id="selectedBox0" fill="none" stroke="#22C" stroke-dasharray="5,5" style="pointer-events:none" d="M101.20452880859375,81.56816864013672 L636.7045288085938,81.56816864013672 636.7045288085938,310.06818389892584 101.20452880859375,310.06818389892584z"></path><g display="inline"><circle id="selectorGrip_resize_nw" fill="#22C" r="4" style="cursor:se-resize" stroke-width="2" pointer-events="all" cx="101.20452880859375" cy="81.56816864013672"></circle><circle id="selectorGrip_resize_n" fill="#22C" r="4" style="cursor:s-resize" stroke-width="2" pointer-events="all" cx="368.95452880859375" cy="81.56816864013672"></circle><circle id="selectorGrip_resize_ne" fill="#22C" r="4" style="cursor:sw-resize" stroke-width="2" pointer-events="all" cx="636.7045288085938" cy="81.56816864013672"></circle><circle id="selectorGrip_resize_e" fill="#22C" r="4" style="cursor:w-resize" stroke-width="2" pointer-events="all" cx="636.7045288085938" cy="195.81817626953128"></circle><circle id="selectorGrip_resize_se" fill="#22C" r="4" style="cursor:nw-resize" stroke-width="2" pointer-events="all" cx="636.7045288085938" cy="310.06818389892584"></circle><circle id="selectorGrip_resize_s" fill="#22C" r="4" style="cursor:n-resize" stroke-width="2" pointer-events="all" cx="368.95452880859375" cy="310.06818389892584"></circle><circle id="selectorGrip_resize_sw" fill="#22C" r="4" style="cursor:ne-resize" stroke-width="2" pointer-events="all" cx="101.20452880859375" cy="310.06818389892584"></circle><circle id="selectorGrip_resize_w" fill="#22C" r="4" style="cursor:e-resize" stroke-width="2" pointer-events="all" cx="101.20452880859375" cy="195.81817626953128"></circle><line id="selectorGrip_rotateconnector" stroke="#22C" x1="368.95452880859375" y1="81.56816864013672" x2="368.95452880859375" y2="61.56816864013672"></line><circle id="selectorGrip_rotate" fill="lime" r="4" stroke="#22C" stroke-width="2" style="cursor:url(images/rotate.png) 12 12, auto;" cx="368.95452880859375" cy="61.56816864013672"></circle></g></g>
+    </svg>
+</div>
+<script>
+    setPoints($('.no1 #control1'));
+    setPoints($('.no1 #control2'));
+    setPoints($('.no1 #control3'));
+    setPoints($('.no1 #control4'));
+    function setPoints(obj){
+        var mouseDown=false;
+        obj.mousedown(function(){
+            mouseDown=true;
+        });
+        obj.parent().mouseup(function(){
+            mouseDown=false;
+        });
+        obj.parent().mousemove(function(e){
+            if(mouseDown)
+            {
+                obj.attr('cx',e.pageX-obj.parent().offset().left);
+                obj.attr('cy',e.pageY-obj.parent().offset().top);
+                setPolyline();
+                setPath();
+            }
+        });
+    }
+    function setPolyline(){
+        var x1=getPointsPosition($('.no1 #control1'));
+        var x2=getPointsPosition($('.no1 #control2'));
+        var x3=getPointsPosition($('.no1 #control3'));
+        var x4=getPointsPosition($('.no1 #control4'));
+        var points=x3.x+','+x3.y+' '+x1.x+','+x1.y+' '+x2.x+','+x2.y+' '+x4.x+','+x4.y;
+        $('.no1 #polyline').attr('points',points);
+    }
+    function setPath(){
+        var x1=getPointsPosition($('.no1 #control1'));
+        var x2=getPointsPosition($('.no1 #control2'));
+        var x3=getPointsPosition($('.no1 #control3'));
+        var x4=getPointsPosition($('.no1 #control4'));
+        var d='M'+x3.x+' '+x3.y+' C'+x1.x+' '+x1.y+' '+x2.x+' '+x2.y+' '+x4.x+','+x4.y;
+        $('.no1 #path').attr('d',d);
+        $('.no1 #text1').text(d);
+    }
+    function getPointsPosition(obj){
+        if(obj.length==1)
+        {
+            var position={'x':obj.attr('cx'),'y':obj.attr('cy')};
+            return position;
+        }
+    }
+
+
+
+    setPoints2($('.no2 #control1'));
+    setPoints2($('.no2 #control2'));
+    setPoints2($('.no2 #control3'));
+    function setPoints2(obj){
+        var mouseDown=false;
+        obj.mousedown(function(){
+            mouseDown=true;
+        });
+        obj.parent().mouseup(function(){
+            mouseDown=false;
+        });
+        obj.parent().mousemove(function(e){
+            if(mouseDown)
+            {
+                obj.attr('cx',e.pageX-obj.parent().offset().left);
+                obj.attr('cy',e.pageY-obj.parent().offset().top);
+                setPolyline2();
+                setPath2();
+            }
+        });
+    }
+    function setPolyline2(){
+        var x1=getPointsPosition($('.no2 #control1'));
+        var x2=getPointsPosition($('.no2 #control2'));
+        var x3=getPointsPosition($('.no2 #control3'));
+        var points=x1.x+','+x1.y+' '+x2.x+','+x2.y+' '+x3.x+','+x3.y;
+        $('.no2 #polyline').attr('points',points);
+    }
+    function setPath2(){
+        var x1=getPointsPosition($('.no2 #control1'));
+        var x2=getPointsPosition($('.no2 #control2'));
+        var x3=getPointsPosition($('.no2 #control3'));
+        var d='M'+x1.x+' '+x1.y+' Q'+x2.x+' '+x2.y+' '+x3.x+' '+x3.y;
+        $('.no2 #path').attr('d',d);
+        $('.no2 #text1').text(d);
+    }
+</script>
+</body>
+</html>

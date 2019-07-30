@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<title>Atlas Mall</title>
+</head>
+<body>
+	<div id="content">
+		<div class="index-nav nav-position" style="padding-top:10px;padding-left:30%;">
+            <ul class="eat-nav-tab">
+                <li class="eat-nav-tab-shop" ng-click="changeTab('shanghu')" ng-show="tabType=='shanghu'" id="eat-nav-selected">商户</li>
+                <li class="eat-nav-tab-shop" ng-click="changeTab('shanghu')" ng-show="tabType!='shanghu'">商户</li>
+                <li class="eat-nav-tab-coupon" ng-click="changeTab('tuangou')" ng-show="tabType=='tuangou'" id="eat-nav-selected" style="border-radius:0px 5px 5px 0px;">团购</li>
+                <li class="eat-nav-tab-coupon" ng-click="changeTab('tuangou')" ng-show="tabType!='tuangou'">团购</li>
+                <div class="clear"></div>
+            </ul>
+			<img src="./img/icon-back.png" alt="" class="icon-menu-back" onclick="history.go(-1)" >
+		</div>
+		<div class="eat-container-shop" ng-show="tabType=='shanghu'">
+            <p ng-show="{{mallprod}}.length === 0" class="malltag-tips">抱歉，该商场并无相关商铺，请返回查看其他分类</p>
+			<ul class="eat-shop-ul">
+                <li class="eat-shop-li" ng-repeat="malltags in mallprod" ng-click="goShop('{{malltags.poi_id}}')">
+                    <div class="malltag-logo">
+                        <span><img ng-src="{{malltags.logo.key | logo}}" alt="" class="eat-shop-logo"></span>
+                    </div>
+                    <div class="eat-shop-detail">
+                        <p class="eat-shop-title">{{malltags.ch_name}}
+                        <span class="span-coupon" ng-show="malltags.hasCoupon == true">团</span>
+                        <span class="span-discount" ng-show="malltags.hasDiscount == true">慧</span>
+                        <span class="span-book" ng-show="malltags.hasOrder == true">订</span></p>
+                        <a href="/weixin/MapReborn/indoorMap.html?{{bpid}}&{{malltags.building.poi_id}}/{{malltags.floor.poi_id}}/{{malltags.poi_id}}/{{thisuid}}">
+
+                            <img src="./img/icon-shoplist-indoor.png" alt="" class="icon-shoplist-indoor">
+                            <p class="eat-shop-add">{{malltags.building.ch_name}}{{malltags.floor.ch_name}}</p>
+                            <div class="clear"></div>
+                        </a>
+                    </div>
+                    <div class="clear"></div>
+                </li>
+            </ul>
+		</div>
+        <div class="eat-container-coupon" ng-show="tabType=='tuangou'">
+            <p ng-show="{{mallprod}}.length === 0 || {{ItHasCoupon}} == false" class="malltag-tips">抱歉，该商场并无相关进行中的团购</p>
+            <div class="eat-coupon-div" ng-repeat="malltags in mallprod" ng-show="malltags.hasCoupon == true">
+                <a href="#/shop/{{cityId}}/{{malltags.poi_id}}">
+	                <div style="position:relative;">
+	                    <p class="eat-coupon-title">{{malltags.ch_name}}（{{malltags.building.ch_name}}）</p>
+	                    <img src="./img/icon-home-departtri.jpg" alt="" class="icon-eat-coupon-title">
+	                </div>
+                </a>
+                <ul class="eat-coupon-ul">
+                    <a href="#/coupon?url={{coupon.web_url}}&shopname={{malltags.ch_name}}&mallid={{bpid}}&buildingid={{malltags.building.poi_id}}&floorid={{malltags.floor.poi_id}}&shopid={{malltags.poi_id}}&mallname={{malltags.building.ch_name}}&way=1" ng-repeat="coupon in malltags.coupons">
+	                    <li class="eat-coupon-li">
+                            <div class="malltag-logo">
+                                <span><img ng-src="{{coupon.pic_url}}" alt="" class="eat-coupon-img"></span>
+                            </div>
+	                        <div class="eat-coupon-detail">
+	                            <p class="eat-coupon-text">{{coupon.desc}}</p>
+                                <p class="eat-coupon-price">
+                                    ￥&nbsp;{{coupon.current_price}}&nbsp;
+                                    <span style="text-decoration:line-through;">{{coupon.list_price}}</span>
+                                </p>
+	                            <p class="eat-coupon-type">
+	                            &nbsp;<img ng-src="{{coupon.type | couponimg}}" alt="" style="max-width:12px;">&nbsp;来自{{coupon.type}}
+	                            </p>
+	                        </div>
+	                        <div class="clear"></div>
+	                    </li>
+	                </a>
+                </ul>
+            </div>
+        </div>
+        <!-- <div class="ICPnumber"><a href="http://www.miitbeian.gov.cn/state/outPortal/loginPortal.action">苏州图云信息科技有限公司&nbsp;&nbsp;版权所有&nbsp;&nbsp;苏ICP备14053328号</a></div> -->
+	</div>
+</body>
+</html>

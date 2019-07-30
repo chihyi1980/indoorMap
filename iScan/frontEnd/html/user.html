@@ -1,0 +1,85 @@
+
+<ng-include src="'./html/com-nav.html'"></ng-include>
+<div class="container">
+
+    <div class="row">
+
+        <div class="center-content">
+
+            <div class="shipperLoader" ng-show="showUserList">
+
+                <table class="table table-hover" id="example">
+                    <thead>
+                    <tr>
+                        <th>已啟用</th>
+                        <th>用戶名稱</th>
+                        <th>郵箱</th>
+                        <th>管理員</th>
+                        <th>創建時間</th>
+                        <th>更新時間</th>
+                        <th>
+                            &nbsp;&nbsp;<span class="glyphicon glyphicon-plus-sign"  ng-mouseover="selected($event.target)" ng-mouseout="unselected($event.target)" ng-click="addUser()" title="新增" style="font-size:20px;cursor: pointer"></span>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="user in users">
+                        <td><span ng-class="{true: 'glyphicon glyphicon-ok text-primary', false:  'glyphicon glyphicon-remove text-danger'}[!!user.enabled]" ></span></td>
+                        <td>{{user.name || '-'}}</td>
+                        <td>{{user.email || '-'}}</td>
+                        <td><span ng-class="{true: 'glyphicon glyphicon-ok text-primary', false:  'glyphicon glyphicon-remove text-danger'}[!!user.isAdmin]" ></span></td>
+                        <td>{{user.createAt || '-'}}</td>
+                        <td>{{user.updateAt || '-'}}</td>
+                        <td>
+                            <span class="glyphicon glyphicon-pencil"  ng-mouseover="selected($event.target)" ng-mouseout="unselected($event.target)" ng-click="editUser(user)" title="编辑" style="font-size:20px;cursor: pointer"></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+            <div class="shipperLoader" ng-show="!showUserList">
+                <h1>{{isEdit? '編輯':'新增'}}</h1>
+                <form class="form-horizontal" role="form" name="userForm">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">用户名</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" ng-model="newUser.name" placeholder="用户名" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">密碼</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" ng-model="newUser.pwd" placeholder="密碼" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">email</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" ng-model="newUser.email" placeholder="email">
+                        </div>
+                    </div>
+                    <div class="form-group" ng-show="isEdit">
+                        <label class="col-sm-3 control-label">啟用</label>
+                        <div class="col-sm-6">
+                            <input type="checkbox"  ng-model="newUser.enabled">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-6 control-label">
+                            <button type="button"  class="btn btn-default" ng-click="cancelAdd()">取消</button> &nbsp;&nbsp;&nbsp;
+                            <button type="button" class="btn btn-primary" ng-disabled="userForm.$invalid" ng-show="!isEdit" ng-click="saveAdd()">SAVE</button>
+                            <button type="button" class="btn btn-primary" ng-disabled="userForm.$invalid" ng-show="isEdit" ng-click="saveEdit()">SAVE</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div><!-- /col-xs-9 -->
+
+    </div><!-- /row -->
+
+</div> <!-- /container -->
+<ng-include src="'./html/com-footer.html'"></ng-include>
+

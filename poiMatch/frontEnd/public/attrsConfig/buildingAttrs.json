@@ -1,0 +1,7 @@
+[{"attr":"ch_name","tip":"中文名","required":true,"type":"text"},
+{"attr":"displayName","tip":"显示名称","type":"text"},
+{"attr":"addr","tip":"地址","type":"text"},
+{"attr":"lat","tip":"坐标：经度","type":"text"},
+{"attr":"lon","tip":"坐标：纬度","type":"text"},
+{"attr":"disable","tip":"不可用","type":"option"},
+{"attr":"remove", "tip":"删除","type":"remove"}]

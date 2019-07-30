@@ -1,0 +1,27 @@
+{
+  "name": "AtlasBeacon",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "3.5.0",
+    "mongoose": "4.8.1",
+    "async": "0.9.0",
+    "ejs": "1.0.0",
+    "crypto": "0.0.3",
+    "csv": "0.3.7",
+    "cron": "1.0.1",
+    "iconv-lite": "0.4.6",
+    "excel-export": "0.4.1",
+    "connect-multiparty": "1.2.4",
+    "mongodb": "1.4.7",
+    "eventproxy": "0.2.6",
+    "grunt": "0.4.5",
+    "grunt-contrib-uglify": "0.7.0",
+    "grunt-contrib-concat":"latest",
+    "grunt-css": "latest",
+    "request": "2.81.0"
+  }
+}

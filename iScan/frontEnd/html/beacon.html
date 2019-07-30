@@ -1,0 +1,150 @@
+
+<ng-include src="'./html/com-nav.html'"></ng-include>
+<div class="container">
+
+<div class="row">
+
+<div>
+    <ng-include src="'./html/com-menu.html'"></ng-include>
+</div>
+
+<div class="center-content">
+
+    <div class="panel panel-info" ng-show="showBeaconList">
+        <div class="panel-heading" style="text-align: center">
+            <div class="input-group col-lg-3">
+                <input type="text"  ng-model="iscanQuery" class="form-control" placeholder="输入iscanID或描述"  value="{{kw}}">
+            <span class="input-group-btn">
+                <button class="btn btn-danger" type="button" ng-click="searchData(iscanQuery)"><i class="glyphicon glyphicon-search"></i></button>
+            </span>
+            </div>
+        </div>
+
+        <table class="table table-hover" id="example">
+            <thead>
+            <tr>
+                <th class="col-md-1">iScanId</th>
+                <th>mac地址</th>
+                <th>公司</th>
+                <!--
+                <th>所在地區</th>
+                <th>詳細地址</th>
+                -->
+                <th class="col-md-3">描述</th>
+                <th>創建時間</th>
+                <th>更新時間</th>
+                <th>
+                    &nbsp;&nbsp;<span class="glyphicon glyphicon-plus-sign" ng-click="addBeacon()"  style="font-size:20px;cursor: pointer"></span>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="beacon in beacons">
+                <td>{{beacon.iscanId || '-'}}</td>
+                <td>{{beacon.beaconId || beacon.wifiId || '-'}}</td>
+                <td>{{beacon.company || '-'}}</td>
+                <!--
+                <td>{{beacon.area.replace('|', '').replace('|','') || '-'}}</td>
+                <td>{{beacon.address || '-'}}</td>
+                -->
+                <td>{{beacon.desc || '-'}}</td>
+                <td>{{beacon.createAt || '-'}}</td>
+                <td>{{beacon.updateAt || '-'}}</td>
+                <td><span class="glyphicon glyphicon-pencil" ng-click="editBeacon(beacon)" title="編輯" ng-mouseover="selected($event.target)" ng-mouseout="unselected($event.target)" style="font-size:20px;cursor: pointer"></span>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <span class="glyphicon glyphicon-remove" ng-click="removeBeacon(beacon)" title="刪除" ng-mouseover="selected($event.target)" ng-mouseout="unselected($event.target)" style="font-size:20px;cursor: pointer"></span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <ul class="pagination">
+            <li ng-class="{disabled: curPage == 1}"><a ng-href="#/beacon/1?{{kw}}"><span>第一頁</span></a></li>
+            <li ng-class="{disabled: curPage == 1}"><a ng-href="#/beacon/{{curPage <= 1 ? 1 : curPage - 1 }}?{{kw}}"><span>上一頁</span></a></li>
+            <li ng-repeat='num in pageNums' ng-class='{active:num == curPage}' ><a ng-href="#/beacon/{{num}}?{{kw}}"><span>{{num}}</span></a></li>
+            <li ng-class="{disabled: curPage == totalPages || totalPages == 1 || totalPages == 0}"><a ng-href="#/beacon/{{curPage >= totalPages ? totalPages : curPage + 1}}?{{kw}}"><span>下一頁</span></a></li>
+            <li ng-class="{disabled: curPage == totalPages || totalPages == 1 || totalPages == 0}"><a ng-href="#/beacon/{{totalPages}}?{{kw}}"><span>最後頁</span></a></li>
+        </ul>
+    </div>
+    <div class="shipperLoader" ng-show="!showBeaconList">
+        <form class="form-horizontal" role="form" name="beaconForm">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">iScanID</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" ng-model="newBeacon.iscanId" ng-disabled="!isAdd" readonly placeholder="iscanID" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">wifiMac</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" ng-model="newBeacon.beaconId" ng-disabled="!isAdd"  placeholder="wifiMac" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">seekcyId</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" ng-model="newBeacon.seekcyId"  placeholder="seekcyId" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">公司名稱</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" ng-model="newBeacon.company" placeholder="公司名稱" required>
+                </div>
+            </div>
+            <!--
+            <div class="form-group">
+                <label class="col-sm-3 control-label">所在地區</label>
+                <div class="col-sm-6">
+                    <div class="col-sm-3" style="padding-left: 0">
+                        <select required="" class="form-control" ng-model="address.province" ng-options="key as key for (key,value) in division"
+                                ng-change="address.city='';address.district='';">
+                            <option value="">省</option>
+                        </select>
+                    </div>
+                    <div  class="col-sm-3">
+                        <select class="form-control" ng-model="address.city" ng-options="key as key for (key,value) in division[address.province]"
+                                ng-change="address.district='';">
+                            <option value="">市</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-3">
+                        <select class="form-control" ng-model="address.district" ng-options="value as value for value in division[address.province][address.city]"
+                                required="required">
+                            <option value="">區</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">詳細地址</label>
+                <div class="col-sm-6">
+                    <span class="help-block" ng-show="!!district">
+                        {{address.province + address.city + address.district}}
+                    </span>
+
+                    <input type="text" class="form-control" ng-model="newBeacon.address" placeholder="詳細地址">
+                </div>
+            </div>
+            -->
+            <div class="form-group">
+                <label class="col-sm-3 control-label">位置描述</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" ng-model="newBeacon.desc" placeholder="位置描述">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-6 control-label">
+                    <button type="button"  class="btn btn-default" ng-click="cancelAdd()">取消</button> &nbsp;&nbsp;&nbsp;
+                    <button type="button" class="btn btn-primary" ng-disabled="beaconForm.$invalid" ng-show="isAdd" ng-click="saveAdd()">新增</button>
+                    <button type="button" class="btn btn-primary" ng-disabled="beaconForm.$invalid" ng-show="!isAdd" ng-click="saveEdit()">保存</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div><!-- /col-xs-9 -->
+
+</div><!-- /row -->
+
+</div> <!-- /container -->
+<ng-include src="'./html/com-footer.html'"></ng-include>
+

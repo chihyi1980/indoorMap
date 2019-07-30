@@ -1,0 +1,30 @@
+    <div>
+        <p class="collect-building-title">收藏的商场</p>
+        <p class="collect-building-nobuilding" ng-show="likeLength.buildings === 0">暂无收藏的商场</p>
+        <ul class="collect-building-ul index-menu-user-ul">
+            <a href="#/building/{{building.id}}" ng-repeat="building in like.buildings">
+                <li class="collect-building-li">
+                    <div class="collect-building-img">
+                        <img ng-src="{{building.img | img}}" alt="">
+                    </div>
+                    <p class="collect-building-name">{{building.ch_name}}</p>
+                </li>
+            </a>
+            <div class="clear"></div>
+        </ul>
+    </div>
+    <div class="collect-shop">
+        <p class="collect-shop-title">收藏的店铺</p>
+        <p class="collect-shop-noshop" ng-show="likeLength.shops === 0">暂无收藏的店铺</p>
+        <ul class="collect-shop-ul">
+            <a href="#/shop/{{shop.id}}" ng-repeat="shop in like.shops">
+                <li class="collect-shop-li">
+                    <div class="collect-shop-img">
+                        <img ng-src="{{shop.logo.key | logo}}" alt="">
+                    </div>
+                    <p class="collect-shop-name">{{shop.ch_name}}</p>
+                </li>
+            </a>
+            <div class="clear"></div>
+        </ul>
+    </div>

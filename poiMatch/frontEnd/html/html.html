@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+</body>
+<script>
+    function parseDom(arg) {
+        var objE = document.createElement("div");
+        objE.innerHTML = arg;
+        return objE.firstChild;
+    };
+    console.log(parseDom('<div>aaaaaaa</div>'))
+    document.body.appendChild(parseDom('<div>aaaaaaa</div>'))
+</script>
+</html>

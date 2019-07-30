@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="src/Utils.js"></script>
+    <script src="src/Canvas.js"></script>
+    <script src="src/Shape.js"></script>
+    <style>
+        #canvas{
+            width: 600px;
+            height: 400px;
+            color: #66512c;
+            opacity: 0.5;
+            background-color: #66512c;
+            padding: 40px
+        }
+        #svg{
+            width:100%;
+            height:100%;
+            background-color:#FFF;
+            position:relative;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="controller" style="text-align: center;height: 60px">
+        <span>图形类型：</span>
+        <button class='tu' value="line">直线</button>
+        <button class='tu' value="arc">弧线</button>
+        <button class='tu' value="rectangle">方形</button>
+        <button class='tu' value="polygon">多边形</button>
+        <button class='tu' value="circle">圆形</button><br/><br/>
+        <div id="borderType" style="display: none">
+            <span>边线类型：</span>
+            <button class="border" value="lineTo">直</button>
+            <button class="border" value="curve">弧</button>
+        </div>
+        <div id="lineType" style="display: none">
+            <span>直线类型：</span>
+            <button class="line" value="lineTo">自定义</button>
+            <button class='line' value="horizontal">水平</button>
+            <button class='line' value="vertical">垂直</button>
+        </div>
+
+    </div><br/>
+    <div id="canvas">
+        <svg id="svg"></svg>
+    </div>
+    <div id="c2"></div>
+</body>
+<script>
+    var params = {};
+    var shape = new AtlasDraw.Shape(document.getElementById('svg'), params);
+    var ctx = shape.getContext();
+    ctx.addEventListener('click', function(e){
+        shape.setDrawStatus('click');
+        shape.polyLine.setVertex(e.offsetX || e.layerX, e.offsetY || e.layerY);
+    });
+    ctx.addEventListener('contextmenu', function(e){
+        e.preventDefault();
+        //shape[type].clearVertexes();
+    });
+
+    ctx.addEventListener('dblclick', function(e){
+        shape.setDrawStatus('dblclick');
+        shape.polyLine.clearVertexes();
+    });
+
+    ctx.addEventListener('mousemove', function(e){
+        if(!shape.getCurDrawStatus() || shape.getCurDrawStatus() == 'dblclick'){return;}
+        shape.setDrawStatus('move');
+        shape.polyLine.setVertex(e.offsetX || e.layerX, e.offsetY || e.layerY);
+        shape.polyLine.draw();
+    });
+
+    ctx.addEventListener('mouseover', function(e){
+        if(e.target != this){
+            e.target['fill'] = '#D1D6FF';
+            e.target.style['fill-opacity'] = '1'
+        }
+        e.stopPropagation();
+    })
+
+</script>
+<script>
+    var tus = document.querySelectorAll('#controller .tu');
+    for(var i= 0; i < tus.length; ++i ){
+        tus[i].addEventListener('click', function(e){
+            this.setAttribute('disabled', true);
+            shape.setGraphType(this.value);
+            if(this.value == 'polygon'){
+                document.getElementById('borderType').style.display = '';
+            }else{
+                document.getElementById('borderType').style.display = 'none';
+            }
+            if(this.value == 'line'){
+                document.getElementById('lineType').style.display = '';
+            }else{
+                document.getElementById('lineType').style.display = 'none';
+            }
+            isDraw = false;
+            for(var j= 0; j < tus.length; ++j ){
+                if(tus[j] != this){
+                    tus[j].removeAttribute('disabled');
+                }
+            }
+        })
+    }
+    var borders = document.querySelectorAll('#controller .border');
+    for(var i= 0; i < borders.length; ++i ){
+        borders[i].addEventListener('click', function(e){
+            this.setAttribute('disabled', true);
+            shape.setDirective(this.value);
+            for(var j= 0; j < borders.length; ++j ){
+                if(borders[j] != this){
+                    borders[j].removeAttribute('disabled');
+                }
+            }
+        })
+    }
+
+    var lines = document.querySelectorAll('#controller .line');
+    for(var i= 0; i < lines.length; ++i ){
+        lines[i].addEventListener('click', function(e){
+            this.setAttribute('disabled', true);
+            shape.setDirective(this.value);
+            for(var j= 0; j < lines.length; ++j ){
+                if(lines[j] != this){
+                    lines[j].removeAttribute('disabled');
+                }
+            }
+        })
+    }
+</script>
+</html>

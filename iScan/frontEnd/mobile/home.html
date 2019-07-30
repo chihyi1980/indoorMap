@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title></title>
+    <link href="./src/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="./src/map.css" rel="stylesheet">
+    <script src="./src/1.0.2.js"></script>
+    <script src="./src/1.0.2.ui.js"></script>
+    <script src="./src/1.0.2.ext.js"></script>
+    <script src="./src/jquery.min.1.10.1.js"></script>
+    <script src="./src/bootstrap/js/bootstrap.min.js"></script>
+
+    <style>
+        html,body{
+            height: 100%;
+            overflow: hidden;
+        }
+        .atlas-txt.user-defined{
+            line-height: 18px;
+            height: 22px;
+            text-align: center;
+            min-width: 50px;
+            border: 2px solid #666;
+            color: #449d44;
+            font-weight: bold;
+            background: #ffffff;
+            border-radius: 30px;
+            border-top-left-radius: 0;
+            -webkit-box-shadow: 2px 2px 4px #888;
+            -moz-box-shadow: 2px 2px 4px #888;
+            box-shadow: 2px 2px 4px #888;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-inverse" role="navigation">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/mobile" style="font-size: 30px;">iScan</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a>
+                        <select class="form-control" id="userSel">
+                            <option value="" selected>选择人员</option>
+                        </select>
+                    </a>
+                </li>
+                <li class="dropdown">
+                    <a><input type="checkbox" id="toggleSearch" style="width: 20px;height: 20px;"/> <strong style="font-size: 18px; color: #ffffff"> 开启查询 </strong></a>
+                </li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+<div class="container-fluid" style="height: 100%;width: 100%;">
+    <div style="width: 80%; margin: 10% auto;"  id="siteSel">
+        <select class="form-control">
+            <option value="" selected>请选择一个场地:</option>
+        </select>
+    </div>
+    <div id="indoormap" style="height: 85%; width: 100%; display: none">
+        <div class="alert alert-danger" style="display: none;position: absolute; width: 400px;z-index: 9999">
+            <strong></strong>
+        </div>
+        <div id="atlas">
+
+        </div>
+    </div>
+
+</div>
+</body>
+<script>
+    Date.prototype.Format = function (fmt) {
+        var o = {
+            "M+": this.getMonth() + 1,
+            "d+": this.getDate(),
+            "h+": this.getHours(),
+            "m+": this.getMinutes(),
+            "s+": this.getSeconds(),
+            "q+": Math.floor((this.getMonth() + 3) / 3),
+            "S": this.getMilliseconds()
+        };
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
+    };
+
+    $(function(){
+        $('body').off();
+        var mapSdk, jid, mapId;
+        var initMap = function(buildId, callback) {
+            var buildUrl = '/indoorMap/build/detail?id=' + buildId;
+            $.get(buildUrl)
+                    .success(function (ret) {
+                        if (ret && ret.result == 'succeed') {
+                            var build = ret.data;
+                            var floorList = build.floors;
+                            var params = {
+                                width: $('#indoormap').width(),
+                                height: $('#indoormap').height(),
+                                cityId: "",
+                                floorList: floorList,
+                                mapDiv: 'atlas',
+                                maxZoom: 15,
+                                minZoom: 0.5,
+                                initFloor: '',
+                                initZoom: 1,
+                                initMarkPoi: '',
+                                initCallback: function () {
+                                    $('#toggleSearch').trigger('click');
+                                },
+                                poiClick: function (poi) {
+                                },
+                                enFloorUI: true,
+                                enFacUI: false,
+                                enBufferUI: true,
+                                fenceUrl: '/indoorMap/floor/fence',
+                                apiUrl:  '/indoorMap/floor/simple',
+                                floorChange: function (floorName) {
+                                    mapSdk.drawAlertFence();
+                                }
+                            };
+                            mapSdk = new Atlas(params);
+                        }
+                    })
+        };
+        var initUsers = function(jid){
+            var url = '/track/getUsers?jobsiteId={jid}&time={time}'.replace('{jid}', jid).replace('{time}', new Date().Format("yyyy-MM-dd hh:mm:ss"));
+            $.get(url)
+                    .success(function(data){
+                        if(data){
+                            var optionStr = '<option value="" selected>选择人员</option>';
+                            data.forEach(function(item){
+                                optionStr += '<option value="{val}">{name}</option>'.replace('val', item._id).replace('{name}',item._id);
+                            });
+                            $('#userSel').children().replaceWith($(optionStr));
+                        }
+                    }).error(function(err){
+                        console.log(err)
+                    })
+        };
+        $.get('/jobsite/all?l=10&s=0')
+            .success(function(data){
+                var optionStr = '<option value="" selected>请选择一个场地:</option>';
+                if(data){
+                    data[1].forEach(function(item){
+                        optionStr += '<option value="{val}">{name}</option>'.replace('{val}', item.id + '&' + item.mapId).replace('{name}', item.name);
+                    });
+                    $('#siteSel select').children().replaceWith($(optionStr));
+                }
+            }).error(function(err){
+                alert('Jobsite get error');
+                window.location.href = '/mobile';
+            });
+        $('body').on('change', '#siteSel select', function(e){
+            var that = e.target;
+            var ids = $(that).val().split('&');
+            jid = ids[0];
+            mapId = ids[1];
+            if(jid){
+                initUsers(jid);
+            }
+            if(mapId){
+                $('#indoormap').show();
+                $('#siteSel').hide();
+                initMap(mapId);
+            }
+        });
+        var isAutoSearch = false;
+        var searchDataByJobsiteId = function(jId, callback){
+            $.get('/track/getByJobsite?jobsiteId=' + jId + '&time=' + new Date().Format("yyyy-MM-dd hh:mm:ss"))
+                    .success(function(ret){
+                        callback(ret || []);
+                    }).error(function(err) {
+                        callback([]);
+                    });
+
+        };
+        var openSearch = function(jid){
+            searchDataByJobsiteId(jid, function(tags){
+                mapSdk._initLayer();
+                if(tags.length > 0){
+                    var locusData = [];
+                    var uid = $('#userSel').val() || null;
+                    var alertStr = '';
+                    tags.forEach(function(tag){
+                        var inFence = mapSdk.getFenceIds(tag.coord.x, tag.coord.y);
+                        if(inFence && inFence[0]){
+                            if(inFence[0] == 'alert'){
+                                alertStr += tag.userId + '进入禁区!<br/>';
+                            }                            
+                        }
+
+                        if(uid){
+                            if(uid == tag.userId){
+                                locusData.push({
+                                    userId: tag.userId,
+                                    coords: tag.coord,
+                                    offset: null
+                                });
+                            }
+                        }else{
+                            locusData.push({
+                                userId: tag.userId,
+                                coords: tag.coord,
+                                offset: null
+                            });
+                        }
+
+                    });
+                    if(locusData.length > 0){
+                        mapSdk.setPersonnelLocus(locusData.reverse());
+                    }
+                    if(alertStr !== ''){
+                        $(".alert").html(alertStr);
+                        $(".alert").show();
+                        $(".alert").fadeOut(2500);
+                    }
+                }
+            });
+
+        };
+
+        $('body').on('change', '#toggleSearch', function(e){
+            if(!mapSdk || mapSdk == undefined || mapSdk == null) return;
+            var that = e.target;
+            if(that.checked){
+                isAutoSearch = true;
+                (function loop(){
+                    if(!isAutoSearch){
+                        return null;
+                    }else{
+                        openSearch(jid);
+                        setTimeout(function(){
+                            loop();
+                        }, 1000)
+                    }
+                })();
+            }else{
+                isAutoSearch = false;
+            }
+        })
+
+    });
+</script>
+</html>

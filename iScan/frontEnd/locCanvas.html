@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        html,body{
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+
+    <div style="background:#EFEFEF;width:100%;height: 100%;overflow: hidden">
+        <div style="position: absolute;top: 0;left: 0;width:100%;height: 100%; overflow: scroll !important;">
+            <canvas id="canvas" style="position: absolute;top: 0;left: 0;z-index:1; background: #ffffff"></canvas>
+            <canvas id="layer" style="position: absolute;top: 0;left: 0; z-index: 2;"></canvas>
+        </div>
+    </div>
+    <div style="width: 244px; border: 1px solid #0078ca;position: absolute;left: 10px;top: 10px;z-index: 9;">
+        <input type="text" style="width: 200px;text-align: center;margin: 0;" id="bltId" placeholder="blt_mac"/>
+        <button onclick="init()" style="margin: 0;">ok</button>
+    </div>
+
+
+</body>
+<script>
+   var AtlasJsonpCallers = {};
+   var _jsonpCall = function(url , callback){
+        var script = document.createElement('script');
+        var callbackName = "AtlasCallback_" + new Date().getTime() + '_' + Math.floor(10000* Math.random());
+        //eval(callbackName);
+        document.body.appendChild(script);
+        var jsonpCb = function(data){
+            try{
+                document.body.removeChild(script);
+            }catch(e){console.log(e)}
+            if (data && data.result == 'succeed') {
+                callback(data.data);
+            } else {
+                if(data){
+                    callback(data);
+                }else{
+                    callback(null);
+                }
+            }
+        };
+        AtlasJsonpCallers[callbackName] = jsonpCb;
+        script.setAttribute('src', url + '?callback=AtlasJsonpCallers.'+ callbackName);
+        script.onerror = function(){
+            callback(null);
+        }
+   };
+   var canvas = document.getElementById('canvas');
+   var ctx = canvas.getContext('2d');
+   var layer = document.getElementById('layer');
+   var layerCtx = layer.getContext('2d');
+   var init = function(){
+
+        var image = new Image();
+        image.src = '/img/4F.png';
+        image.onload = function () {
+            canvas.width = layer.width = image.width;
+            canvas.height = layer.height = image.height;
+            ctx.clearRect(0, 0, image.width, image.height);
+            ctx.drawImage(image, 0, 0, image.width, image.height);
+            drawPoint();
+            //drawPos(300, 100, '#FF0000')
+        }
+    };
+    window.onload = init;
+
+   var lastCoord;
+   function getRandomColor(a,b,c) {
+       var randomColor1 = Math.floor(Math.random() * 100) + a;
+       var randomColor2 = Math.floor(Math.random() * 100) + b;
+       var randomColor3 = Math.floor(Math.random() * 100) + c;
+       return ("rgb(" + randomColor1 + ", " + randomColor2 + ", " + randomColor3 + ")");
+   }
+   var drawPos = function(x, y, color){
+       layerCtx.save();
+       layerCtx.globalAlpha= 0.15;
+       layerCtx.fillStyle = '#0000FF';
+       layerCtx.arc(x,y, 60, 0, Math.PI*2 , false);
+       layerCtx.fill();
+       layerCtx.globalAlpha= 1;
+       layerCtx.fillStyle = color;
+       layerCtx.beginPath();
+       layerCtx.arc(x, y, 6, 0, Math.PI*2, true);
+       layerCtx.fill();
+       layerCtx.restore();
+   };
+   var drawPoint = function(){
+       var bltId = (document.getElementById('bltId').value).trim() || '00:00:20:01:01:9D';
+       var url = '/loc/now/' + bltId;
+       _jsonpCall(url, function(data){
+           if(data){
+               if(!lastCoord  || data.time != lastCoord.time){
+                   if(data._coord){
+                       layerCtx.clearRect(0, 0, layer.width, layer.height);
+                       drawPos(data._coord.x, data._coord.y, '#3115F7');
+                       ctx.fillStyle = '#A2D8EA';
+                       ctx.beginPath();
+                       ctx.arc(data._coord.x || -1,data._coord.y || -1, 5, 0, Math.PI*2, true);
+                       ctx.fill();
+                   }
+
+                   ctx.restore();
+                   lastCoord = data;
+               }
+           }
+           setTimeout(drawPoint, 5000);
+       })
+    }
+
+</script>
+</html>

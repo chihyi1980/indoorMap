@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<title>Atlas Mall</title>
+</head>
+<body>
+	<div id="content">
+		<div class="index-nav nav-position">
+			<h1>商户分类</h1>
+			<img src="./img/icon-back.png" alt="" class="icon-menu-back" onclick="history.go(-1)" >
+		</div>
+		<div class="cate-container">
+			<div class="cate-search-div">
+            	<input type="text" class="index-search-input"  ng-keyup="entersearch($event,keyword)" ng-focus="showHis=true" ng-blur="ngBlurHis()" ng-model="keyword" placeholder="搜索商场内品牌">
+	            <button class="index-search-button" ng-click="searchmall(keyword.toLowerCase())"></button>
+	            <ul class="building-searchhis" ng-show="showHis">
+	        		<a href="#/searchinmall/{{cityId}}/{{building.poi_id}}/{{his}}" ng-repeat="his in searchhis">
+	        			<li class="building-searchhis-li">{{his}}</li>
+	        		</a>
+	        		<div class="clear"></div>
+	        	</ul>
+            	<div class="clear"></div>
+        	</div>
+        	<div class="cate-list">
+            	<ul class="cate-list-ul">
+            		<a href="#/malltag/{{cityId}}/{{catebpid}}/{{prod}}" ng-repeat="prod in building.prods">
+                        <li class="cate-list-li">            			
+            				<img ng-src="{{prod | prodicon}}" alt="" class="icon-cate-list">
+            				<p class="cate-list-p">{{prod | prodname}}</p>
+            				<div class="clear"></div>
+            			</li>
+            		</a>
+            	</ul>
+            </div>
+		</div>
+		<!-- <div class="ICPnumber"><a href="http://www.miitbeian.gov.cn/state/outPortal/loginPortal.action">苏州图云信息科技有限公司&nbsp;&nbsp;版权所有&nbsp;&nbsp;苏ICP备14053328号</a></div> -->
+	</div>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en" ng-app="atlas">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>AtlasMall</title>
+    <!--<link rel="stylesheet" href="build/src/atm.app.min.css">-->
+    <!-- <link rel="stylesheet" type="text/css" href="map/css/map.css" /> -->
+    <!--<script src="build/src/app.min.js"></script>-->
+    <!-- <link rel="stylesheet" type="text/css" href="http://developer.amap.com/Public/css/demo.Default.css" /> -->
+    <link rel="stylesheet" href="./css/default.css">
+    <link rel="stylesheet" href="./css/index-demo.css">
+    <link rel="stylesheet" href="./lib/angular-loading-bar/build/loading-bar.min.css">
+    <link rel="stylesheet" type="text/css" href="./css/overall.css" />
+    <!-- <link rel="stylesheet/less" type="text/css" href="./css/overall2.css" /> -->
+
+    <link rel="stylesheet" type="text/css" href="./css/main.css" />
+    <link rel="stylesheet/less" type="text/css" href="./less/overall.less" />
+</head>
+<body>
+<div ng-view></div>
+</body>
+<!-- build:js({.tmp,app}) scripts/scripts.js -->
+<!-- bower:js -->
+
+<!--newMap add by zhaop-->
+<script src="newMap/js/zoomer-animate.js"></script>
+<script src="newMap/js/zoomer-core.js"></script>
+<script src="newMap/js/zoomer-eventHandler.js"></script>
+<script src="newMap/js/hammer.js"></script>
+<script src="newMap/js/encryptJSON.js"></script>
+<script src="newMap/js/sdk-dataModel.js"></script>
+<script src="newMap/js/atlasSDK.ui.js"></script>
+
+<script src="lib/angular/angular.min.js"></script>
+<script src="lib/angular-route/angular-route.min.js"></script>
+<script src="lib/angular-touch/angular-touch.min.js"></script>
+<script src="lib/angularjs-geolocation/src/geolocation.js"></script>
+<script src="lib/less/dist/less-1.7.4.min.js"></script>
+
+<script src="script/app.js"></script>
+<script src="script/init.js"></script>
+<script src="script/route.js"></script>
+
+<!--
+<script src="script/home/controller.js"></script>
+<script src="script/building/controller.js"></script>
+<script src="script/shop/controller.js"></script>
+<script src="script/collect/controller.js"></script>
+<script src="script/search/controller.js"></script>
+<script src="script/hotkey/controller.js"></script>
+<script src="script/brand/controller.js"></script>
+<script src="script/searchinmall/controller.js"></script>
+<script src="script/map/controller.js"></script>
+<script src="script/coupon/controller.js"></script>
+<script src="script/districts/controller.js"></script>
+<script src="script/outdoormap/controller.js"></script>
+<!--add by zhaop-->
+<script src="script/newMap/controller.js"></script>
+<!---->
+
+<script src="script/category/controller.js"></script>
+<script src="script/eat/controller.js"></script>
+<script src="script/submit/controller.js"></script>
+<script src="script/malltag/controller.js"></script>
+<script src="script/go/controller.js"></script>
+
+
+<script src="script/service/mall.js"></script>
+<script src="script/service/building.js"></script>
+<script src="script/service/search.js"></script>
+<script src="script/service/shop.js"></script>
+<script src="script/service/localstorage.js"></script>
+<script src="script/service/hotkey.js"></script>
+<script src="script/service/brand.js"></script>
+<script src="script/service/searchinmall.js"></script>
+<script src="script/service/cache.js"></script>
+<script src="script/service/districts.js"></script>
+<!--add by zhaop-->
+<script src="script/service/mapofbuilding.js"></script>
+
+<script src="script/service/subway.js"></script>
+<script src="script/service/malltag.js"></script>
+<script src="script/service/prods.js"></script>
+
+<script src="script/filter/gps.js"></script>
+<script src="script/filter/img.js"></script>
+<script src="script/filter/logo.js"></script>
+<script src="script/filter/random.js"></script>
+<script src="script/filter/floorname.js"></script>
+<script src="script/filter/hasCoupon.js"></script>
+<script src="script/filter/commenttype.js"></script>
+<script src="script/filter/couponimg.js"></script>
+<script src="script/filter/commenttime.js"></script>
+<script src="script/filter/prodname.js"></script>
+<script src="script/filter/prodicon.js"></script>
+
+<script src="script/directive/bnLazySrc.js"></script>
+
+<!-- <script src="script/directive/lazyload.js"></script> -->
+<!-- endbuild -->
+<script src="lib/js/jquery-2.1.0.min.js"></script>
+<script src="lib/js/snap.js"></script>
+<script src="lib/angular-loading-bar/build/loading-bar.min.js"></script>
+
+
+<!-- <script src="map/js/3rd/jquery.smoothZoom.min.js" charset="utf-8"></script>
+<script src="map/js/joymap/JoyMapSDK.js" charset="utf-8"></script>
+<script src="map/js/joymap/JoyMapSDK.Data.EntityModel.js" charset="utf-8"></script>
+<script src="map/js/joymap/JoyMapSDK.Map.js" charset="utf-8"></script>
+<script src="map/js/joymap/JoyMapSDK.Map.Canvas.js" charset="utf-8"></script>
+<script src="map/js/joymap/JoyMapSDK.Map.Behavior.js" charset="utf-8"></script>
+<script src="map/js/joymap/JoyMapSDK.Map.PoiLayer.js" charset="utf-8"></script>
+<script src="map/js/joymap/JoyMapSDK.Map.Util.js" charset="utf-8"></script>
+<script src="map/js/joymap/JoyMapSDK.Map.GeneMarker.js" charset="utf-8"></script>
+<script src="map/js/joymap/JoyMapSDK.Route.js" charset="utf-8"></script> -->
+</html>

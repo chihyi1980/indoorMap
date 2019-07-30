@@ -1,0 +1,183 @@
+@font-face {
+    font-family: 'Atlas Map';
+    src: url('font/atlas-fonts.eot');
+    src: url('font/atlas-fonts.eot?#iefix') format('embedded-opentype'),
+    url('font/atlas-fonts.woff') format('woff'),
+    url('font/atlas-fonts.ttf') format('truetype'),
+    url('font/atlas-fonts.svg#webfont') format('svg');
+}
+
+.atlas{
+    text-align: left;
+    display: inline-block;
+    font-family: 'Atlas Map';
+    -webkit-font-smoothing: antialiased;
+    font-style: normal;
+    font-weight: normal;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/*public*/
+.atlas:empty{
+    width: 1em;
+}
+
+.atlas-mom-baby:before{
+    content: "k";
+}
+
+.atlas-lift:before{
+    content: "A";
+}
+
+.atlas-stairs:before{
+    content: "ò";
+}
+
+.atlas-escalator:before{
+    content: "ö";
+}
+
+.atlas-gate:before{
+    content: "ﬂ";
+}
+
+.atlas-question-down:before{
+    content: "ô";
+}
+
+.atlas-cashier-desk:before{
+    content: "±";
+}
+
+.atlas-parking:before{
+    content: "ó";
+}
+
+.atlas-toilet:before{
+    content: "o";
+}
+
+.atlas-toilet-man:before{
+    content: "ì";
+}
+
+.atlas-toilet-woman:before{
+    content: "Æ";
+}
+
+.atlas-vip-service:before{
+    content: "½";
+}
+
+.atlas-handicapped:before{
+    content: "Á";
+}
+
+.atlas-taxi:before{
+    content: "Â";
+}
+
+.atlas-ticket-service:before{
+    content: "ø";
+}
+
+.atlas-metro:before{
+    content: "õ";
+}
+.atlas-atm:before{
+    content: "p";
+}
+
+/*shop*/
+.atlas-eat:before{
+    content: "q";
+}
+
+.atlas-drink:before{
+    content: "ï";
+}
+
+.atlas-play:before{
+    content: "ÿ";
+}
+
+.atlas-household:before{
+    content: "s";
+}
+
+.atlas-life-service:before{
+    content: "³";
+}
+
+.atlas-food:before{
+    content: "™";
+}
+
+.atlas-child-product:before{
+    content: "ù";
+}
+
+.atlas-clothing-ornament:before{
+    content: "ú";
+}
+
+.atlas-menswear:before{
+    content: "û";
+}
+
+.atlas-womenswear:before{
+    content: "ü";
+}
+
+.atlas-sport-leisure:before{
+    content: "t";
+}
+
+.atlas-bag-accessory:before{
+    content: "v";
+}
+
+.atlas-cosmetic:before{
+    content: "¹";
+}
+
+.atlas-electrical-equipment:before{
+    content: "y";
+}
+
+.atlas-digital-product:before{
+    content: "w";
+}
+
+.atlas-furniture:before{
+    content: "x";
+}
+
+.atlas-office:before{
+    content: "¿";
+}
+
+.atlas-jewellery:before{
+    content: "z";
+}
+
+.atlas-clock-glass:before{
+    content: "þ";
+}
+
+.atlas-meeting:before{
+    content: "u";
+}
+
+.atlas-sale:before{
+    content: "ý";
+}
+
+.atlas-other:before{
+    content: "¾";
+}
+
+.atlas-stationery:before{
+    content: "²";
+}

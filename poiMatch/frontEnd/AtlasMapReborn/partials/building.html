@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<title></title>
+</head>
+<body class="snapjs-right snapjs-left">
+	<div id="content"  style="background-color:#fff;">
+		<div class="collecttips" ng-show="showNotice">
+	        <p class="collecttips-p">{{noticeContent}}</p>
+	    </div>
+		<div class="index-nav nav-position">
+			<h1>{{building.ch_name}}</h1>
+		</div>
+		<div class="index-container">
+			<ul class="index-container-ul">
+				<li class="index-container-li">
+					<div class="index-building-img-div">
+						<img ng-src="{{building.buildings[0].pics[0].key | img}}" alt="" class="index-building-img">
+					</div>
+					<div class="index-building-info">
+						<p class="index-building-name">{{building.ch_name}}</p>
+						<div class="index-building-locate">
+							<img class="icon-home-locate" src="./img/icon-home-pin.png" alt="">
+							<p class="index-building-distance"><span>{{building.location.substring(0,building.location.length-3)}}</span>km</p>
+							<div class="clear"></div>
+						</div>
+						<div class="clear"></div>
+					</div>
+					<div class="building-collectarea">
+						<img ng-click="toogleLikeBuilding(building)" class="index-menu-ul-img" ng-src="{{isLike ? './img/icon-heart-redbuilding.png' : './img/icon-heart-whitebuilding.png'}} "></img>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class="cate-container building-search">
+			<div class="cate-search-div">
+            	<input type="text" class="index-search-input"  ng-keyup="entersearch($event,keyword)" ng-focus="showHis=true" ng-blur="ngBlurHis()" ng-model="keyword" placeholder="搜索商场内品牌">
+	            <button class="index-search-button" ng-click="searchmall(keyword.toLowerCase())"></button>
+	            <ul class="building-searchhis" ng-show="showHis">
+	        		<a href="#/searchinmall/{{cityId}}/{{building.poi_id}}/{{his}}" ng-repeat="his in searchhis">
+	        			<li class="building-searchhis-li">{{his}}</li>
+	        		</a>
+	        		<div class="clear"></div>
+	        	</ul>
+            	<div class="clear"></div>
+        	</div>     	
+		</div>
+		<div class="building-mall-detail">
+			<a href="/newMap/indoorMap.html?{{building.poi_id}}&{{building.buildings[0].poi_id}}&{{thisuid}}">
+				<div class="building-mall-detail-div">
+					<img src="./img/icon-home-go-hang.png" alt="" class="icon-home-go">
+					<p class="building-mall-detail-text">商场地图</p>
+				</div>
+			</a>
+			<a href="#/category/{{building.poi_id}}/{{cityId}}">
+				<div class="building-mall-detail-div">
+					<img src="./img/icon-home-go-buy.png" alt="" class="icon-home-go">
+					<p class="building-mall-detail-text">商铺分类</p>
+				</div>
+			</a>
+			<a href="#/malltag/{{cityId}}/{{building.poi_id}}/0+1+5">
+				<div class="building-mall-detail-div">
+					<img src="./img/icon-home-go-eat.png" alt="" class="icon-home-go">
+					<p class="building-mall-detail-text">美食</p>
+				</div>
+			</a>			
+			<a href="#/malltag/{{cityId}}/{{building.poi_id}}/2">
+				<div class="building-mall-detail-div">
+					<img src="./img/icon-home-go-play.png" alt="" class="icon-home-go">
+					<p class="building-mall-detail-text">娱乐</p>
+				</div>
+			</a>
+			<div class="clear"></div>
+		</div>
+		<div class="building-shopinfo">
+			<ul class="building-shopinfo-ul">
+				<li class="building-shopinfo-li" ng-show="building.open">
+					<p class="building-shopinfo-time">
+						营业时间：<span>{{building.open}}</span>
+					</p>
+				</li>
+				<li class="building-shopinfo-li" ng-show="building.addr">
+					<p class="building-shopinfo-transport">
+						地址：<span>{{building.addr}}</span>
+					</p>
+				</li>
+				<li class="building-shopinfo-li" ng-show="building.phone">
+					<p class="building-shopinfo-tel">
+						电话：<span>{{building.phone}}</span>
+					</p>
+				</li>
+				<li class="building-shopinfo-li" ng-show="building.traffic">
+					<p class="building-shopinfo-trans">
+						交通指南：<span>{{building.traffic}}</span>
+					</p>
+				</li>
+			</ul>
+		</div>
+		<!-- <div class="ICPnumber"><a href="http://www.miitbeian.gov.cn/state/outPortal/loginPortal.action">苏州图云信息科技有限公司&nbsp;&nbsp;版权所有&nbsp;&nbsp;苏ICP备14053328号</a></div> -->
+	</div>
+</body>
+</html>

@@ -1,0 +1,350 @@
+商场通API version 0.1
+
+首页
+
+取得资源服务列表
+url: /api/resources/
+method:get
+json:
+
+{
+	picPrefix : 'http://ztcimg.b0.upaiyun.com/resources/',		//图片URL前缀
+	key: '37adfb372ce47dfa',									//数据加密密钥
+}
+
+
+//==========================================================
+
+取得所有城市列表
+url: /api/city/list
+method:get
+json:
+
+{
+	[
+		{
+			id:'12345',
+			name:'北京市',
+		},
+		{
+			id:'12343',
+			name:'上海市',
+		}
+	]
+}
+
+json(simple):
+{
+	[
+		{'12345','北京市'},{'12343','上海市'}
+	]
+}
+
+//==========================================================
+
+
+取得省份城市列表
+url: /api/city/list/province/:provinceId
+method:get
+json:
+
+{
+	[
+		{
+			id:'12345',
+			name:'苏州市',
+		},
+		{
+			id:'12343',
+			name:'南京市',
+		}
+	]
+}
+
+json(simple):
+{
+	[
+		{'12345','苏州市'},{'12343','南京市'}
+	]
+}
+
+//==========================================================
+
+
+取得城市内的所有商场列表
+url: /api/mall/list/city/:cityId/
+method:get
+json:
+
+{
+	[
+		{
+			id: '12345'														//商场ID
+			showName: '久光百货(静安店)',										//商场名
+			lat: '31.33',													//latitude 纬度
+			lon: '131.111',													//longitude 经度
+			pic: 'default_mall.png',										//商场照片
+			poiId: '1234455',												//POI id
+		},
+		{
+			id: '12345'														//商场ID
+			showname: '美罗城(徐汇店)',										//商场名
+			lat: '31.33',													//latitude 纬度
+			lon: '131.111',													//longitude 经度
+			pic: 'default_mall.png',										//商场照片
+			poiId: '1234455',												//POI id
+		},
+	]
+}
+
+json(simple):
+{
+	[
+		{'12345','久光百货(静安店)','31.33','131.111','default_mall.png','1234455'},
+		{'12345','美罗城(徐汇店)','31.33','131.111','default_mall.png','1234455'},
+	]
+}
+
+//==========================================================
+
+取得商铺分类名称列表
+url: /api/shop/catelogs
+method:get
+json:
+{
+	[
+		{
+			id: '6688',
+			name: '服装/配饰',
+			pic: 'icon.png',
+			sub: [
+					{
+						id: '788',
+						name: '女装',
+						pic: 'icon.png',
+					},
+					{
+						id: '886',
+						name: '职业女装',
+						pic: 'icon.png',
+					},
+					{
+						id: '658',
+						name: '男装',
+						pic: 'icon.png',
+					},
+			],
+		},
+		{
+			id: '8752',
+			name: '家用百货',
+			sub: [
+					{
+						id: '334',
+						name: '家用百货',
+						pic: 'icon.png',
+					},
+					{
+						id: '234',
+						name: '厨具',
+						pic: 'icon.png',
+					},
+					{
+						id: '987',
+						name: '五金灯具',
+						pic: 'icon.png',
+					},
+			],
+		},
+	]
+}
+
+json(simple):
+{
+	[
+		{'6688','服装/配饰','icon.png',[{'788', '女装','icon.png'},{'886', '职业女装','icon.png'},{'658', '男装','icon.png'},]},
+		{'8752','家用百货','icon.png',[{'334', '家用百货','icon.png'},{'234', '厨具','icon.png'},{'987', '五金灯具','icon.png'},]},
+	]
+}
+
+//==========================================================
+
+取得城市内的所有商铺列表
+url: /api/shop/list/city/:cityId/
+method:get
+json:
+{
+	[
+		{
+			id: '12345',													//商铺ID
+			showName: 'H&M',												//商铺名
+			mallName: '久光百货'												//商场名
+			floorName: 'A座3F'												//楼层名
+			lat: '31.33',													//latitude 纬度
+			lon: '131.111',													//longitude 经度
+			pic: 'default_shop.png',  										//商铺代表图(可能是logo或照片)
+			catelogs:['22','56','66'],										//商铺分类关键词
+			poiId : '44556',												//商铺POI ID
+			mallId: '778889',												//所属商场ID
+			floorId: '111211',												//所属商场楼层ID
+		}
+	]
+}
+
+json(simple):
+{
+	[
+		{
+			'12345','H&M','久光百货','A座3F','31.33','131.111','default_shop.png',['22','56','66'],'44556','778889',
+		}
+	]
+}
+//==========================================================
+
+取得关键词搜索商场结果
+url: /api/mall/list/keyword/city/:keyword/:mallId/
+method:get
+json:
+{
+	[
+		{
+			id: '12345'														//商场ID
+			showName: '美罗城(徐汇店)',										//商场名
+			lat: '31.33',													//latitude 纬度
+			lon: '131.111',													//longitude 经度
+			pic: 'default_mall.png',										//商场照片
+			poiId: '1234455',												//POI id
+		},
+	]
+}
+
+json(simple):
+{
+	[
+		{'12345','美罗城(徐汇店)','31.33','131.111','default_mall.png','1234455'},
+	]
+}
+
+//==========================================================
+
+取得关键词搜索商铺结果
+url: /api/shop/list/keyword/city/:keyword/:shopId/
+method:get
+json:
+{
+	[
+		{
+			id: '12345',													//商铺ID
+			showName: '城市之间',											//商铺名
+			mallName: '久光百货'												//商场名
+			floorName: 'B座B1'												//楼层名
+			lat: '31.33',													//latitude 纬度
+			lon: '131.111',													//longitude 经度
+			pic: 'default_shop.png',  										//商铺代表图(可能是logo或照片)
+			catelogs:['22','56','66'],										//商铺分类关键词
+			poiId : '44556',												//商铺POI ID
+			mallId: '778889',												//所属商场ID
+			floorId: '111211',												//所属商场楼层ID
+		},
+	],
+}
+
+json(simple):
+{
+	[
+		{
+			'12345','城市之间','久光百货','B座B1','31.33','131.111','default_shop.png',['22','56','66'],'44556','778889',
+		}
+	]
+}
+
+//==========================================================
+
+商场主页
+
+取得商场详细内容 & 取得商场内分楼层的商铺与公共设施列表
+url: /api/mall/detail/:mallId/
+method:get
+json:
+{
+	id: '12345',													//商场ID
+	showName: '久光百货(静安店)',										//商场名
+	lat: '31.33',													//latitude 纬度
+	lon: '131.111',													//longitude 经度
+	pic: 'default_mall.png',										//商场照片
+	poiId: '1234455',												//POI id
+	catelogs: ['33','5767','21']									//商场内商铺分类，出现最多的商铺排前面
+	addr: '上海市静安区南京东路',										//地址
+	phone: '021-88557744',											//电话
+	website: 'http://www.yyy.com.cn',								//网站
+	desc: '百货内容描述',												//商场描述
+	opentime: '周一至周五10:00 - 21:00, 周末与假日 9:30 - 22:00'		//营业时间
+	traffic: '地铁1号线（星海广场）、公交：4路215路',					//交通信息
+	sns:'',															//商场相关社交工具，微博、微信(格式未定)
+	floors:
+	[
+		{
+			id: '111211',											//楼层ID
+			showName: '1F',											//楼层名称
+			poiId: '1234455',										//POI id
+			shops:
+			[
+				{
+					id: '12345',									//商铺ID
+					showName: 'Zara',								//商铺名称
+					pic: 'default_shop.png',						//商铺代表图(可能是logo或照片)
+					catelogs:['22','56','66'],						//商铺分类关键词
+					poiId : '44556',								//商铺POI ID
+				}
+			],
+		},
+		{
+			id: '111212',											//楼层ID
+			showName: '2F',											//楼层名称
+			poiId: '1234355',										//POI id
+			shops:
+			[
+				{
+					id: '1238',										//商铺ID
+					showName: '麦当劳',								//商铺名称
+					pic: 'default_shop.png',						//商铺代表图(可能是logo或照片)
+					catelogs:['22','56','66'],						//商铺分类关键词
+					poiId : '44556',								//商铺POI ID
+				}
+			],
+		},
+	],
+}
+
+
+//==========================================================
+
+商铺主页
+
+取得商铺详细内容
+url: /api/shop/detail/:shopId/
+method:get
+json:
+{
+	id: '12345',													//商铺ID
+	showName: '城市之间',											//商铺名
+	mallName: '久光百货'												//商场名
+	floorName: 'B座B1'												//楼层名
+	number: 'B1-401'												//商铺编号
+	lat: '31.33',													//latitude 纬度
+	lon: '131.111',													//longitude 经度
+	pic: 'default_shop.png',  										//商铺代表图(可能是logo或照片)
+	catelogs:['22','56','66'],										//商铺分类关键词
+	poiId : '44556',												//商铺POI ID
+	mallId: '778889',												//所属商场ID
+	floorId: '111211',												//所属商场楼层ID
+	desc: '商铺品牌内容描述',											//商铺品牌内容描述
+	sns:'',															//商场相关社交工具，微博、微信(格式未定)
+	coupon: [
+		title: '50元代金券，只要39元',								//优惠活动标题
+		pic: 'photo.png',											//图片或网站logo
+		desc: '今日面包代金券',										//内文(限制字数)
+		url: 'http://i.meituan.com/deal/24978468.html',				//点击后跳转的手机版网站
+		type: '',													//优惠券类型(格式未定)
+	],
+}

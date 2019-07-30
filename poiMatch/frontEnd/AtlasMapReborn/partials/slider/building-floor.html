@@ -1,0 +1,40 @@
+<div class="index-search-div building-floor-search">
+    <input type="text" class="index-search-input" ng-model="shopName">
+    <button class="index-search-button"></button>
+    <div class="clear"></div>
+</div>
+<div class="building-floor-con">
+    <div  ng-repeat="floor in building.buildings[0].floors">
+        <div class="building-click-title" ng-click="changeOpen($index)">
+            <p class="building-click-mall-title">{{floor.ch_name | floorname}}</p>
+            <img class="icon-arrow" ng-src="{{floor.isOpen ? './img/icon-arrow-up.png' : './img/icon-arrow-down.png'}}"></img>
+        </div>
+        <ul class="index-menu-search-ul building-click-mall-open" ng-show="floor.isOpen">
+            <a href="#/shop/{{shop.poi_id}}" ng-repeat="shop in floor.shops">
+                <li>
+                    <div>
+                        <img ng-src="{{shop.logo.key | logo}}" alt="" class="index-menu-search-ul-img">
+                        <div class="index-menu-search-ul-shopinfo">
+                            <p class="index-menu-search-ul-shopname" ng-show="shop.ch_name.length > 0">
+                                <span>{{shop.ch_name}}</span>
+                            </p>
+                            <p class="index-menu-search-ul-shopname" ng-show="shop.en_name.length > 0">
+                                <span>{{shop.en_name}}</span>
+                            </p>
+                            <div class="buildingfloor-tag">
+                                <label ng-repeat="tag in shop.tag.split(',') track by $index" class="index-menu-search-ul-label-cloth" ng-show="shop.tag">{{tag}}</label>
+                            </div>
+                            <div class="buildingfloor-tagelse">
+                                <img class="icon-tag-coupon" src="./img/icon-tag-coupon.png" ng-show="shop.hasCoupon"></img>
+                                <img class="icon-tag-sale" src="./img/icon-tag-sale.png" ng-show="shop.hasDiscount"></img>
+                                <img class="icon-tag-book" src="./img/icon-tag-book.png" ng-show="shop.hasOrder"></img>
+                                <div class="clear"></div>
+                            </div>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </li>
+            </a>
+        </ul>
+    </div>
+</div>

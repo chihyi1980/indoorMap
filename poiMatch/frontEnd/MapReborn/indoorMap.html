@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+    <META HTTP-EQUIV="Cache-Control" CONTENT="no-cache">
+    <META HTTP-EQUIV="Expires" CONTENT="0">
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="http://api.atlasyun.com/AtlasMap/1.0.2/map.min.css">
+    <link rel="stylesheet" href="./src/main.css">
+    <script src="http://api.atlasyun.com/AtlasMap/canvas/1.0.2"></script>
+    <script src="http://api.atlasyun.com/AtlasMap/getUI/1.0.2"></script>
+    <script src="./src/controller.js"></script>
+</head>
+<title></title>
+</head>
+
+<body>
+    <div class="header">
+        <div class="nav">
+            <h1></h1>
+        </div>
+    </div>
+    <div class="map-body">
+        <!--floor button list-->
+        <div id="atlas">
+        </div>
+        <div id="search-content">
+            <div class="search">
+                <input type="text" placeholder="搜索" id="SearchinMallInput">
+                <button id="searchinmall" onclick="javascript:SearchinMall();">搜索</button>
+            </div>
+            <div id="searchList"></div>
+            <div class="fac-list" id="fac-list">
+                <ul>
+                    <li onclick="javascript:CategoryFood();"><img src="./images/iconfont-food.png" alt="">
+                        <p>美食</p>
+                    </li>
+                    <li onclick="javascript:CategoryDrink();"><img src="./images/iconfont-drink.png" alt="">
+                        <p>饮品</p>
+                    </li>
+                    <li onclick="javascript:CategoryBaby();"><img src="./images/iconfont-baby.png" alt="">
+                        <p>母婴</p>
+                    </li>
+                    <li onclick="javascript:CategoryBianlidian();"><img src="./images/iconfont-bianlidian.png" alt="">
+                        <p>便利店</p>
+                    </li>
+                    <li id="FacFuti"><img src="./images/iconfont-futi.png" alt="">
+                        <p>扶梯</p>
+                    </li>
+                    <li id="FacXishoujian"><img src="./images/iconfont-toilet.png" alt="">
+                        <p>洗手间</p>
+                    </li>
+                    <li id="FacZhiti"><img src="./images/iconfont-zhiti.png" alt="">
+                        <p>直梯</p>
+                    </li>
+                    <li id="FacATM"><img src="./images/iconfont-atm.png" alt="">
+                        <p>ATM</p>
+                    </li>
+                    <div class="clear"></div>
+                </ul>
+            </div>
+            <div class="closeSearch">
+                <button id="closeSearch" onclick="javascript:closeSearch();">点击关闭</button>
+            </div>
+        </div>
+        <!-- <div id="NewFloor">
+            <ul>
+                <li>1F</li>
+                <li>2F</li>
+                <li>3F</li>
+            </ul>
+            <div class="myposition"><img src="./images/iconfont-location0.png" alt=""></div>
+        </div> -->
+        <!-- float button-->
+        <div class="search">
+            <!-- <p>公共设施</p> -->
+            <input type="text" id="searchOut" onclick="javascript:openSearch();" placeholder="搜索">
+            <button id="searchinmall">搜索</button>
+        </div>
+        <!--
+        <div id="discount-hidden" class="float-button" style="display: none">优惠</div>
+        <div id="discount-show" class="float-button" style="display: none">优惠</div>
+        -->
+        <div id="atlas-logo" style="display: none"></div>
+        <div id="coupon-detail" style="display: none" title="{{coupon.desc}}">
+            <img />
+            <p class="desc"></p>
+            <p class="price">
+                <span class="cur-price">￥&nbsp;{{coupon.current_price}}&nbsp;</span>
+                <span class="old-price">{{coupon.list_price}}</span>
+            </p>
+        </div>
+        <div id="poi-detail" style="display: none">
+            <span>
+                <p class="poi">{{curMarkName}}</p>
+                <p><b class="floor">{{curFloorName}}</b>层</p>
+            </span>
+            <button class="btn btn-primary" id="detailBtn">详情</button>
+            <button class="btn-navigation" id="startBtn" style="right: 100px;background-color: #00b38a;color: #FFFFFF; display: none">起点</button>
+            <button class="btn-navigation" id="endBtn" style="right: 60px;background-color: #ac2925;color: #FFFFFF;display: none">终点</button>
+            <button class="btn-navigation" id="navBtn">导航</button>
+        </div>
+    </div>
+</body>
+
+<HEAD>
+    <META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
+</HEAD>
+
+</html>

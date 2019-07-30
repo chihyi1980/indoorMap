@@ -1,0 +1,130 @@
+
+<ng-include src="'./html/com-nav.html'"></ng-include>
+<div class="container">
+
+    <div class="row">
+
+        <div>
+            <ng-include src="'./html/com-menu.html'"></ng-include>
+        </div>
+
+        <div class="center-content">
+            <div class="shipperLoader">
+                <div class="col-lg-3">
+                    <ng-include src="'./html/left-menu.html'"></ng-include>
+                </div>
+                <div class="col-lg-9">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <ul class="nav nav-pills" role="tablist" ng-show="curPageType == 'jobsite'">
+                                <li role="presentation" class="col-lg-5">
+                                    <div class="input-prepend input-group list-inline">
+                                        <span class="add-on input-group-addon"><i class="glyphicon glyphicon glyphicon-time"></i></span>
+                                        <input type="text" class="form-control dateShow"  id="dateSelect-indoorMap" value="{{currentDate}}" readonly class="span4" style="text-align: center"/>
+                                    </div>
+                                </li>
+                                <li>
+                                    <button class="btn btn-warning" id='nowTime' ng-click="setNowTime()">Ao Vivo</button>
+                                </li>
+
+                                <li role="presentation"  class="col-sm-2" style="text-align: center">
+                                    <button class="btn btn-primary" id='overviewSearch' ng-click="{true: showPersonnelLocus(), false: searchDataByUserId()}[curPageType == 'jobsite']">Procurar</button>
+                                </li>
+                                <li  style="color: #000;font-weight: bold">
+                                    <input type="checkbox" id="auto-search" ng-click="toggleAutoSearch($event.target)"/>Consulta Automática
+                                    <select ng-model="searchTimeSpace" ng-options="i for i in timeSpaceOption">
+                                        <option value="">Período</option>
+                                    </select>
+                                    <select ng-model="searchUser" ng-options="(u._id) for u in usersCache">
+                                        <option value="">Escolher Pessoa</option>
+                                    </select>
+                                </li>
+                            </ul>
+                            <ul class="nav nav-pills" role="tablist" ng-show="curPageType == 'user'">
+                                <li role="presentation" class="col-lg-7">
+                                    <div class="input-prepend input-group list-inline">
+                                        <span class="add-on input-group-addon"><i class="glyphicon glyphicon glyphicon-time"></i></span>
+                                        <input type="text" class="form-control dateShow"  id="datePicker" value="{{currentDateRange}}" readonly  style="text-align: center;"/>
+                                    </div>
+                                </li>
+                                <li role="presentation"  class="col-sm-2" style="text-align: center">
+                                    <button class="btn btn-primary" id='trackSearch' ng-click="searchDataByUserId()">Procurar</button>
+                                </li>
+                                <li ng-show="taggers && (taggers.length > 0)">
+                                    <button class="btn btn-danger" ng-click="showIndoorMap(tracks)" >
+                                        <span class="glyphicon glyphicon-random">Rota</span>
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="panel-body" id="mapContainer" style="min-height: 550px">
+                            <div id="atlas" ng-show="curPageType == 'jobsite'">
+
+                            </div>
+                            <div class="search-content" ng-show="curPageType == 'user' && taggers && taggers.length">
+                                <table class="table table-hover" id="example"  ng-show="tracks.length > 0">
+                                    <thead>
+                                    <tr>
+                                        <th> # </th>
+                                        <th>Hora da Consulta</th>
+                                        <!--<th>创建时间</th>-->
+                                        <th>ID do Usuário</th>
+                                        <!--
+                                        <th>室内地图</th>
+                                        -->
+                                        <th>Coordenada</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="tagger in taggers" ng-class="{danger:tagger.minor == '0x0001'}"  ng-init="tk = trackProxy(tagger)">
+                                        <td ng-class='{distinct:$index%2 == 0}' > {{$index + 1 + skip}}</td>
+                                        <!--<td>{{jMap[tagger.jobsiteId] || '-'}}</td>-->
+                                        <td>{{tk.time}}</td>
+                                        <!--<td>{{tagger.createAt || '-'}}</td>-->
+                                        <td>{{tk.uid}}</td>
+                                        <td>{{tk.coord}}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <ul class="pagination" ng-show="true">
+                                    <li ng-class="{disabled: curPage == 1}" ng-click="setPageNum(1)"><a><span>Primeira Página</span></a></li>
+                                    <li ng-class="{disabled: curPage == 1}" ng-click="setPageNum(curPage - 1)"><a><span>Página Anterior</span></a></li>
+                                    <li ng-repeat='num in pageNums' ng-class='{active:num == curPage}'  ng-click="setPageNum(num)"><a><span>{{num}}</span></a></li>
+                                    <li ng-class="{disabled: curPage == totalPages || totalPages == 1}"  ng-click="setPageNum(curPage + 1)"><a><span>Próxima Página</span></a></li>
+                                    <li ng-class="{disabled: curPage == totalPages || totalPages == 1}"  ng-click="setPageNum(totalPages)"><a><span>Última Página</span></a></li>
+                                </ul>
+                            </div>
+                            <div ng-show="curPageType == 'user' && tracks.length == 0">
+                                <h1 class="text-danger">no data!</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div><!-- /col-xs-9 -->
+
+    </div><!-- /row -->
+
+</div> <!-- /container -->
+<div id="attrDiv" class="">
+    <div class="content" id='mapModal'style="width:90%;height: 90%; min-height: 400px; overflow-y: auto;" >
+        <span class="glyphicon glyphicon-remove-circle closeModel"
+              style="position: absolute;right: 0px; top: 0px; background: #ffffff; font-size: 30px; width: 30px;height: 30px;border-radius: 15px;"
+              ng-click="closeIndoorMap()">
+        </span>
+        <div id="iCenter"></div>
+    </div>
+</div>
+<div id="videoModal" class="cc-modal fade">
+    <div class="cc-content" style="text-align: center;">
+        <div style="width: 480px; height: 300px;padding: 5px; box-sizing: border-box">
+            <iframe  id="demoIframe" src="" style="width: 100%;height: 100%;">
+
+            </iframe>
+        </div>
+    </div>
+</div>
+<ng-include src="'./html/com-footer.html'"></ng-include>
+

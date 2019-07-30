@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>实时视频</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script src="js/libs/native_module.js"></script>
+	<script src="js/libs/jsplayer.min.js"></script>
+	<script src="js/libs/jquery.min.js"></script>
+	<script src="js/config.js"></script>
+	<script src="js/main.js"></script>
+</head>
+<body>
+<h2>实时视频 </h2>
+<table>
+	<tr>
+	<td>帐号:</td>
+	<td><input id="id" type="edit"></input></td>
+	<tr>
+	<tr>
+	<td>密码:</td>
+	<td><input id="pwd" type="password"></input></td>
+	<tr>
+</table>
+
+<button id="gmega-play"> 播放 </button>
+<button id="gmega-pause" style="margin:10px;"> 停止 </button>
+<span id="gmega-log" style="font-size:14px; color:#333;"></span>
+
+<br>
+<div style="border:1px solid #ccc; width:100%;">
+<canvas id="videoPlayer" width="640" height="360" style="width:100%;"></canvas>
+</div>
+
+</body>
+</html>

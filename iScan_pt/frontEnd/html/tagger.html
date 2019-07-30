@@ -1,0 +1,103 @@
+
+<ng-include src="'./html/com-nav.html'"></ng-include>
+<div class="container">
+
+    <div class="row">
+
+        <div>
+            <ng-include src="'./html/com-menu.html'"></ng-include>
+        </div>
+
+        <div class="center-content">
+            <div class="shipperLoader">
+                <div class="col-lg-3">
+                    <ng-include src="'./html/left-menu.html'"></ng-include>
+                </div>
+                <div class="col-lg-9">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <ul class="nav nav-pills" role="tablist">
+                                <li role="presentation" class="col-lg-5">
+                                    <div class="input-prepend input-group list-inline">
+                                        <span class="add-on input-group-addon"><i class="glyphicon glyphicon glyphicon-time"></i></span>
+                                        <input type="text" class="form-control dateShow"  id="datePicker" value="{{currentDateRange}}" readonly class="span4" style="text-align: center"/>
+                                    </div>
+                                </li>
+                                <li role="presentation"  class="col-sm-3" style="text-align: center">
+                                    <button class="btn btn-primary" id='overviewSearch' ng-click="{true: searchDataByJobsiteId(), false: searchDataByUserId()}[curPageType == 'jobsite']">Procurar</button>
+                                </li>
+                                <li role="presentation" ng-show="(!!curJobsite) && (curPageType == 'jobsite')&& features.camera" class="col-sm-3" style="text-align: center">
+                                    <button class="btn btn-warning" ng-click="showPlayer(curJobsite)">現場直播</button>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="panel-body" style="min-height: 365px">
+                            <div class="search-content" ng-show="taggers && taggers.length">
+                                <table class="table table-hover" id="example" >
+                                    <thead>
+                                    <tr>
+                                        <th> # </th>
+                                        <th>Estado</th>
+                                        <th>状态</th>
+                                        <th>ID do Usuário</th>
+                                        <th>Coordenada</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="tagger in taggers" ng-class="{danger:tagger.blt_status == 4, warning:tagger.blt_status == 6, info:tagger.blt_status == 2 }"  ng-init="tag = tagProxy(tagger)">
+                                        <td ng-class='{distinct:$index%2 == 0}' > {{$index+1 + (curPage-1) * 10}}</td>
+                                        <!--<td>{{jMap[tagger.jobsiteId] || '-'}}</td>-->
+                                        <td>{{tag.time}}</td>
+                                        <td>{{tag.status}}</td>
+                                        <td>{{tag.uid}}</td>
+                                        <td  ><img style="cursor: pointer" ng-click="showMap(tagger)" ng-show="tag.coord.indexOf('null') <= -1" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACaklEQVRYR9WWT3YSQRDGvxqdIRsUdy4yCBuBlfEEkhMET5BwApMTmBskniDkBniC4AkkK3AVZOJ77uTBJk4L5esZosnQ3dM9LvLs5Uz9+XXV19VNeOBFD5wfzgBfwkcdwNtjoAaiWrIB5gkBE8aq34yWH102ZQ0wCv0DInoPmdi8JgQ+bkzFuQ1ILsBVBZWf5eAMhI5NwD82jH5pEXfrM8xMfkaAJPkT/wKgHafkfymGpbnYNUEYAcZh0Adhr1jy1IuYe41IdHUxtADrnp+pHJn5E4CeFF+aJRGj1MgbjX23FYme6p8eoBpIZb/IOjGzNpgBetKcxnVrgNH24zZ53sWmAx81p+LU1JJx1T8E6CRr4y359ctvYpj9rqzAeNs/hUfv7hkzXzYjYSXGkap6K/7QvBaHVgCj0B9s9jN/97fBVVWQumlFol0YgFer3db1r4HNiVC18P8HgKaHqoqoNORUAaUIAe1RuguRTs/g88ad4ShCOVQ2hlDeVJMgo9DvEdH+hth4+bYRLftWIlzv4odycDD3goU4ys536ROX/RMmOlD5lebxM9WdYBrFyp2kwXlGjD6I0lHMXOPktqSKZhSftyKhBNMDPEeNguDK5tjl2XAc11vfkcJmlvE21PUzL+G9/zmnx+Y9MAHoqVPStTEDX7fm8U7h90Ciau3FlI9kMz1zn2QJRDU4JkC+Bx2W3d1hBWA6366qdxJh1ngc+kMQvTKVQTdydT7WFZAB0heyP9BCMF+WFqKd9xK+C+MEYIQokFzGcwZQQhRMXhjgFuKm7CeXy9ZCdFzK/k8tcDiHVqaFWmAV2dLoN/RnODAMbWVZAAAAAElFTkSuQmCC"/></td>
+
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <ul class="pagination">
+                                    <li ng-class="{disabled: curPage == 1}" ng-click="setPageNum(1)"><a><span>Primeira Página</span></a></li>
+                                    <li ng-class="{disabled: curPage == 1}" ng-click="setPageNum(curPage - 1)"><a><span>Página Anterior</span></a></li>
+                                    <li ng-repeat='num in pageNums' ng-class='{active:num == curPage}'  ng-click="setPageNum(num)"><a><span>{{num}}</span></a></li>
+                                    <li ng-class="{disabled: curPage == totalPages || totalPages == 1}"  ng-click="setPageNum(curPage + 1)"><a><span>Próxima Página</span></a></li>
+                                    <li ng-class="{disabled: curPage == totalPages || totalPages == 1}"  ng-click="setPageNum(totalPages)"><a><span>Última Página</span></a></li>
+                                </ul>
+                            </div>
+                            <div class="panel panel-default" ng-show="!taggers">
+                                <div class="panel-body" style="padding-left: 10%;height: 300px">
+                                    <br>
+                                    <h3><span class="label label-default">Selecione Local > Selecionar Data > Consulta</span></h3>
+                                    <br>
+                                    <h3><span class="label label-default">Selecione Pessoa > Selecionar Data > Consulta</span></h3>
+                                    <br>
+                                    <h4><span class="text-primary">Os dados podem ser consultados instantaneamente</span></h4>
+                                </div>
+                            </div>
+                            <div ng-show="taggers && taggers == 0">
+                                <h1 class="text-danger">no data!</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div><!-- /col-xs-9 -->
+
+    </div><!-- /row -->
+
+</div> <!-- /container -->
+
+
+<div id="modal-container">
+
+</div>
+<div id="mapModal" class="cc-modal fade">
+    <div class="cc-content" style="text-align: center;">
+        <div style="width: 600px; height: 380px;padding: 5px; box-sizing: border-box">
+            <div id="iCenter"></div>
+        </div>
+    </div>
+</div>
+<ng-include src="'./html/com-footer.html'"></ng-include>
+

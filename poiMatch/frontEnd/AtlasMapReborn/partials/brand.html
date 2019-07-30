@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<title>{{bname}}</title>
+</head>
+<body>
+	<div id="content">
+		<div class="index-nav nav-position">
+			<h1>{{bname}}</h1>
+			<img src="./img/icon-back.png" alt="" class="icon-menu-back" onclick="history.go(-1)" >
+		</div>
+		<div class="cate-container">
+			<ul class="cate-container-ul">
+				<a href="#/shop/{{cityId}}/{{brands.poi_id}}" ng-repeat="brands in searchBrand">
+					<li class="cate-container-li">
+						<div class="cate-container-logo">
+							<span><img ng-src="{{brands.logo.key | logo}}" alt=""></span>
+						</div>
+						<div class="cate-container-p">
+							<p class="cate-container-name">{{brands.ch_name}}
+							<span class="span-coupon" ng-show="brands.hasCoupon == true">团</span>
+	                        <span class="span-discount" ng-show="brands.hasDiscount == true">慧</span>
+	                        <span class="span-book" ng-show="brands.hasOrder == true">订</span></p>
+							<p class="cate-container-mall">{{brands.mall.ch_name}}{{brands.floor.ch_name}}</p>
+							<p class="cate-container-location">距离我{{brands.location.substring(0,brands.location.length-3)}}km</p>
+							<!-- <div class="searchshop-tagelse">
+	                            <img class="icon-tag-coupon" src="./img/icon-tag-coupon.png" ng-show="brands.hasCoupon"></img>
+	                            <img class="icon-tag-sale" src="./img/icon-tag-sale.png" ng-show="brands.hasDiscount"></img>
+	                            <img class="icon-tag-book" src="./img/icon-tag-book.png" ng-show="brands.hasOrder"></img>
+	                            <div class="clear"></div>
+	                        </div> -->
+						</div>
+						<div class="clear"></div>
+					</li>
+				</a>
+			</ul>
+		</div>
+		<!-- <div class="ICPnumber"><a href="http://www.miitbeian.gov.cn/state/outPortal/loginPortal.action">苏州图云信息科技有限公司&nbsp;&nbsp;版权所有&nbsp;&nbsp;苏ICP备14053328号</a></div> -->
+	</div>
+</body>
+</html>

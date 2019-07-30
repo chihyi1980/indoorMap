@@ -1,0 +1,32 @@
+<ul class="index-menu-user-ul">
+    <li class="index-menu-user-li-login">
+        <img src="./img/icon-defaultavatar.png" alt="" class="index-menu-avatar">
+        <!-- <p class="index-menu-signin" ng-click="togglelogin()">登陆/注册</p> -->
+        <div class="clear"></div>
+    </li>
+    <li class="index-menu-user-li-login-toggle">
+        <div>
+            <!-- <p class="login-weibo">微博</p>
+            <p class="login-weixin">微信</p>
+            <p class="login-qq">QQ</p> -->
+            <img class="icon-login-weibo" src="./img/icon-login-weibo.png"></img>
+            <img class="icon-login-qq" src="./img/icon-login-qq.png"></img>
+            <img class="icon-login-wechat" src="./img/icon-login-wechat.png"></img>
+            <div class="clear"></div>
+        </div>
+    </li>
+    <li class="index-menu-user-li-collect" ng-click='toggleCollect()' >
+        <p class="index-menu-collect-p">我的收藏</p>
+        <div class="clear"></div>
+    </li>
+    <div ng-show="showcollect"></div>
+    <div ng-hide="showcollect" class="home-collect" ng-include="'/partials/slider/home-collect.html' "></div>
+    <li class="index-menu-user-li-about">
+        <p class="index-menu-aboutus-p">关于我们</p>
+        <div class="clear"></div>
+    </li>
+    <li class="index-menu-user-li-about">
+        <p class="index-menu-aboutus-p"><a href="mailto:service@atlasyun.com">意见反馈</a></p>
+        <div class="clear"></div>
+    </li>
+</ul>

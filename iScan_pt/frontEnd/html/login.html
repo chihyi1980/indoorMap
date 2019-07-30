@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+        <title>iBeacon Dashboard Sign in</title>
+        <link href="./css/signin.css" rel="stylesheet">
+
+    </head>
+
+    <body style="height: 100%;">
+
+        <div class="container">
+            <form class="form-signin" role="form" name="loginForm" action= "/signin" method="post">
+                <h2 class="form-signin-heading">Please sign in</h2>
+                <input type="text" class="form-control" ng-model="user.name" placeholder="Username" required autofocus name= "username" value="" />
+                <input type="password" class="form-control" ng-model="user.pwd" placeholder="Password" required name= "password" />
+                <button class="btn btn-lg btn-primary btn-block" type="button" ng-click="login()" ng-disabled="loginForm.$invalid">Sign in</button>
+            </form>
+
+            <div class="push">
+                <p class="text-center text-danger">{{errorMsg}}</p>
+                </div>
+
+                </div> <!-- /container -->
+
+                    <footer>
+                        <p class="info">
+                            <a href="#" target="_blank">Atlas</a> – Work Hard, Play Hard!
+                        </p>
+                    </footer>
+        </body>
+</html>
+

@@ -1,0 +1,72 @@
+
+<ng-include src="'./html/com-nav.html'"></ng-include>
+<div class="container" ng-init="getList()">
+
+    <div class="row">
+
+        <div>
+            <ng-include src="'./html/com-menu.html'"></ng-include>
+        </div>
+
+        <div class="center-content">
+            <table class="table table-hover text-center">
+                <thead class="text-center">
+                <tr>
+                    <th class="text-center">userId</th>
+                    <th class="text-center">Estado</th>
+                    <th class="text-center">地點</th>
+                    <th class="text-center">發生事件</th>
+                    <th class="text-center">是否處理</th>
+                </tr>
+                </thead>
+                <tbody id="deviceShowBody">
+                <tr ng-show="!eventsList || eventsList.length == 0">
+                    <td></td>
+                    <td></td>
+                    <td colspan="3">暂无数据</td>
+                </tr>
+                <tr ng-show="eventsList && eventsList.length > 0"
+                    ng-repeat="event in eventsList"
+                    ng-class="{'text-danger':!event.resolved, 'text-info': event.resolved}">
+                    <td >{{event.userId}}</td>
+                    <td ng-init="_time=getLocaleDateStr(event.createAt)">{{_time}}</td>
+                    <td>{{event.loc_desc}}</td>
+                    <td>{{event.desc}}</td>
+                    <td><span class="glyphicon glyphicon-bell text-danger" ng-show="!event.resolved"></span>
+                        <span class="glyphicon glyphicon-ok text-info" ng-show="event.resolved"></span></td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="2" class='text-left small'>
+                        <span class='badge'><span class="glyphicon glyphicon-bell text-danger"></span> 未處理</span>
+                        <span class='badge'><span class="glyphicon glyphicon-ok text-info"></span> 已處理</span>
+                    </td>
+                    <td colspan="3">
+                        <form class="form-inline text-right" style="position: relative;margin-bottom: 10px;">
+                            <div class="form-group">
+                                <button type="button" class="btn btn-default" ng-click="prevPage()">
+                                    <span class="glyphicon glyphicon-chevron-left"></span>
+                                </button>
+                                <span >{{curPage}} / {{totalPage}}</span>
+                                <button type="button" class="btn btn-default" ng-click="nextPage()">
+                                    <span class="glyphicon glyphicon-chevron-right"></span>
+                                </button>
+                                <input type="text"  ng-model='pageNumInpt' class="text-center" style="width: 60px"  />
+                                <button type="button" class="btn btn-default" ng-click="jumpPage(pageNumInpt)">
+                                    跳转
+                                </button>
+                            </div>
+                        </form>
+
+                    </td>
+                </tr>
+                </tfoot>
+            </table>
+        </div><!-- /col-xs-9 -->
+
+    </div><!-- /row -->
+
+</div> <!-- /container -->
+<ng-include src="'./html/com-footer.html'"></ng-include>
+
