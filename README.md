@@ -5,3 +5,13 @@ iScan為物聯網卡片定位呈現平台，可查詢即時位置、歷史數據
 
 iScan pt 為葡萄牙語版本
 
+#技術架構：
+
+HTML5
+JavaScript
+
+Node.js
+Express
+MangoDB
+Angular 4
+
